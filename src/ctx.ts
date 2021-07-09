@@ -9,9 +9,11 @@ import {
   window,
 } from 'coc.nvim';
 import executable from 'executable';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import * as fs from 'fs-extra';
+import versionCompare from 'node-version-compare';
+import path from 'path';
 import { Config } from './config';
+import { downloadServer, getLatestRelease } from './downloader';
 
 export type Cmd = (...args: any[]) => unknown;
 
@@ -34,15 +36,15 @@ export class Ctx {
 
   resolveBin(): [string, string[]] | undefined {
     const platform = process.platform;
-    const serverDir = join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'server');
-    const bin = join(
+    const serverDir = path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'server');
+    const bin = path.join(
       serverDir,
       'bin',
       platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'macOS' : 'Linux',
       platform === 'win32' ? 'lua-language-server.exe' : 'lua-language-server'
     );
     console.log(bin);
-    if (!existsSync(bin)) {
+    if (!fs.existsSync(bin)) {
       return;
     }
 
@@ -51,7 +53,56 @@ export class Ctx {
       return;
     }
 
-    return [bin, ['-E', join(serverDir, 'main.lua'), `--locale=${this.config.locale}`]];
+    return [bin, ['-E', path.join(serverDir, 'main.lua'), `--locale=${this.config.locale}`]];
+  }
+
+  async checkUpdate() {
+    const latest = await getLatestRelease();
+    if (!latest) {
+      return;
+    }
+
+    let old = '';
+    try {
+      const packageJson = path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'package.json');
+      const packageData = await fs.readJson(packageJson);
+      old = packageData.version;
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+
+    const latestV = latest.tag.match(/\d.*/);
+    if (!latestV) {
+      return;
+    }
+
+    if (versionCompare(latestV[0], old) <= 0) {
+      return;
+    }
+
+    const msg = `Sumneko lua-language-server has a new release: ${latest.tag}, you're using v${old}.`;
+    if (this.config.prompt) {
+      const ret = await window.showQuickpick(['Download the latest server', 'Cancel'], msg);
+      if (ret === 0) {
+        if (process.platform === 'win32') {
+          await this.client.stop();
+        }
+        try {
+          await downloadServer(this.extCtx, latest);
+        } catch (e) {
+          console.error(e);
+          window.showMessage('Upgrade server failed', 'error');
+          return;
+        }
+        await this.client.stop();
+        this.client.start();
+      } else {
+        window.showMessage(`You can run ':CocCommand sumneko-lua.install' to upgrade server manually`);
+      }
+    } else {
+      window.showMessage(`${msg} Run :CocCommand sumneko-lua.install to upgrade`);
+    }
   }
 
   async startServer() {

@@ -10,7 +10,7 @@
 ## `sumneko-lua.prompt`
 - type: `boolean`
 - default: `true`
-- description:    Prompt when server is not found
+- description:    Prompt when server is not found or when server can be updated
 ## `sumneko-lua.locale`
 - type: `string`
 - default: `en-us`

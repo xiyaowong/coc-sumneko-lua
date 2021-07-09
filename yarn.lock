@@ -900,6 +900,11 @@ node-fetch@^2.6.1:
   resolved "https://registry.npm.taobao.org/node-fetch/download/node-fetch-2.6.1.tgz?cache=0&sync_timestamp=1599309667528&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-fetch%2Fdownload%2Fnode-fetch-2.6.1.tgz"
   integrity sha1-BFvTI2Mfdu0uK1VXM5RBa2OaAFI=
 
+node-version-compare@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/node-version-compare/-/node-version-compare-1.0.3.tgz"
+  integrity sha512-unO5GpBAh5YqeGULMLpmDT94oanSDMwtZB8KHTKCH/qrGv8bHN0mlDj9xQDAicCYXv2OLnzdi67lidCrcVotVw==
+
 once@^1.3.0, once@^1.3.1, once@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npm.taobao.org/once/download/once-1.4.0.tgz"

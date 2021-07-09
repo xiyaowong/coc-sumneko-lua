@@ -39,16 +39,18 @@ export async function getLatestRelease(): Promise<ReleaseTag | undefined> {
   return { asset, tag, url: asset.browser_download_url };
 }
 
-export async function downloadServer(context: ExtensionContext): Promise<void> {
+export async function downloadServer(context: ExtensionContext, release?: ReleaseTag): Promise<void> {
   const statusItem = window.createStatusBarItem(0, { progress: true });
-  statusItem.text = 'Fetching latest release information';
   statusItem.show();
 
-  const release = await getLatestRelease();
   if (!release) {
-    statusItem.hide();
-    window.showMessage('Get latest release information failed', 'error');
-    return;
+    statusItem.text = 'Fetching latest release information';
+    release = await getLatestRelease();
+    if (!release) {
+      statusItem.hide();
+      window.showMessage('Get latest release information failed', 'error');
+      return;
+    }
   }
 
   statusItem.text = 'Downloading latest sumneko lua-language-server';
