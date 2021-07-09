@@ -53,15 +53,15 @@ export async function downloadServer(context: ExtensionContext): Promise<void> {
 
   statusItem.text = 'Downloading latest sumneko lua-language-server';
 
-  const targetPath = path.join(context.storagePath, ls_name);
-  const tempDir = await fs.mkdtemp(ls_name);
-  const extTempFile = path.join(tempDir, ls_name);
-
   const resp = await fetch(release.url);
   if (!resp.ok) {
     statusItem.hide();
     throw new Error('Request failed');
   }
+
+  const targetPath = path.join(context.storagePath, ls_name);
+  const tempDir = await fs.mkdtemp(ls_name);
+  const extTempFile = path.join(tempDir, ls_name);
 
   statusItem.text = `Writing temp file ${extTempFile}`;
   await fs.writeFile(extTempFile, await resp.buffer());
