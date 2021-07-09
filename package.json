@@ -1,0 +1,1418 @@
+{
+  "name": "coc-sumneko-lua",
+  "version": "0.0.1",
+  "description": "Lua extension using sumneko lua-language-server for coc.nvim",
+  "author": "wongxy <xiyao.wong@foxmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim"
+  ],
+  "engines": {
+    "coc": "^0.0.80"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xiyaowong/coc-sumneko-lua.git"
+  },
+  "scripts": {
+    "lint": "eslint src --ext ts",
+    "clean": "rimraf lib",
+    "watch": "node esbuild.js --watch",
+    "build": "node esbuild.js",
+    "prepare": "node esbuild.js",
+    "schema": "node ./update-config.js"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120,
+    "semi": true
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.12",
+    "@types/node": "^16.0.1",
+    "@types/node-fetch": "^2.5.11",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.8.2",
+    "coc.nvim": "^0.0.80",
+    "esbuild": "^0.8.42",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "executable": "^4.1.1",
+    "extract-zip": "^2.0.1",
+    "node-fetch": "^2.6.1",
+    "prettier": "^2.2.0",
+    "typescript": "^4.1.2",
+    "fs-extra": "^10.0.0",
+    "rimraf": "^3.0.0"
+  },
+  "activationEvents": [
+    "onLanguage:lua"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "coc-sumneko-lua configuration",
+      "properties": {
+        "sumneko-lua.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable coc-sumneko-lua extension"
+        },
+        "sumneko-lua.prompt": {
+          "type": "boolean",
+          "default": true,
+          "description": "Prompt when server is not found"
+        },
+        "sumneko-lua.locale": {
+          "type": "string",
+          "default": "en-us",
+          "enum": [
+            "en-us",
+            "zh-cn"
+          ],
+          "description": "The localized language used",
+          "enumDescriptions": [
+            "`\"en-us\"` In English",
+            "`\"zh-cn\"` In Chinese"
+          ]
+        },
+        "Lua.color.mode": {
+          "default": "Semantic",
+          "enum": [
+            "Grammar",
+            "Semantic"
+          ],
+          "markdownDescription": "Color mode.",
+          "markdownEnumDescriptions": [
+            "Grammar color.",
+            "Semantic color. You may need to set `editor.semanticHighlighting.enabled` to `true` to take effect."
+          ],
+          "scope": "resource",
+          "type": "string"
+        },
+        "Lua.completion.autoRequire": {
+          "default": true,
+          "markdownDescription": "When the input looks like a file name, automatically `require` this file.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.completion.callSnippet": {
+          "default": "Disable",
+          "enum": [
+            "Disable",
+            "Both",
+            "Replace"
+          ],
+          "markdownDescription": "Shows function call snippets.",
+          "markdownEnumDescriptions": [
+            "Only shows `function name`.",
+            "Shows `function name` and `call snippet`.",
+            "Only shows `call snippet.`"
+          ],
+          "scope": "resource",
+          "type": "string"
+        },
+        "Lua.completion.displayContext": {
+          "default": 6,
+          "markdownDescription": "Previewing the relevant code snippet of the suggestion may help you understand the usage of the suggestion. The number set indicates the number of intercepted lines in the code fragment. If it is set to `0`, this feature can be disabled.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.completion.enable": {
+          "default": true,
+          "markdownDescription": "Enable completion.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.completion.keywordSnippet": {
+          "default": "Replace",
+          "enum": [
+            "Disable",
+            "Both",
+            "Replace"
+          ],
+          "markdownDescription": "Shows keyword syntax snippets.",
+          "markdownEnumDescriptions": [
+            "Only shows `keyword`.",
+            "Shows `keyword` and `syntax snippet`.",
+            "Only shows `syntax snippet`."
+          ],
+          "scope": "resource",
+          "type": "string"
+        },
+        "Lua.completion.showParams": {
+          "default": true,
+          "markdownDescription": "Display parameters in completion list. When the function has multiple definitions, they will be displayed separately.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.completion.workspaceWord": {
+          "default": true,
+          "markdownDescription": "Shows words within the workspace.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.diagnostics.disable": {
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Disabled diagnostic (Use code in hover brackets).\n",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.diagnostics.enable": {
+          "default": true,
+          "markdownDescription": "Enable diagnostics.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.diagnostics.globals": {
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Defined global variables.\n",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.diagnostics.neededFileStatus": {
+          "markdownDescription": "If you want to check only opened files, choice Opened; else choice Any.\n",
+          "properties": {
+            "ambiguity-1": {
+              "default": "Any",
+              "description": "%config.diagnostics.ambiguity-1%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "circle-doc-class": {
+              "default": "Any",
+              "description": "%config.diagnostics.circle-doc-class%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "close-non-object": {
+              "default": "Any",
+              "description": "%config.diagnostics.close-non-object%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "code-after-break": {
+              "default": "Opened",
+              "description": "%config.diagnostics.code-after-break%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "count-down-loop": {
+              "default": "Any",
+              "description": "%config.diagnostics.count-down-loop%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "deprecated": {
+              "default": "Opened",
+              "description": "%config.diagnostics.deprecated%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "doc-field-no-class": {
+              "default": "Any",
+              "description": "%config.diagnostics.doc-field-no-class%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-doc-class": {
+              "default": "Any",
+              "description": "%config.diagnostics.duplicate-doc-class%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-doc-field": {
+              "default": "Any",
+              "description": "%config.diagnostics.duplicate-doc-field%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-doc-param": {
+              "default": "Any",
+              "description": "%config.diagnostics.duplicate-doc-param%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-index": {
+              "default": "Any",
+              "description": "%config.diagnostics.duplicate-index%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-set-field": {
+              "default": "Any",
+              "description": "%config.diagnostics.duplicate-set-field%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "empty-block": {
+              "default": "Opened",
+              "description": "%config.diagnostics.empty-block%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "global-in-nil-env": {
+              "default": "Any",
+              "description": "%config.diagnostics.global-in-nil-env%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "lowercase-global": {
+              "default": "Any",
+              "description": "%config.diagnostics.lowercase-global%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "newfield-call": {
+              "default": "Any",
+              "description": "%config.diagnostics.newfield-call%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "newline-call": {
+              "default": "Any",
+              "description": "%config.diagnostics.newline-call%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "no-implicit-any": {
+              "default": "None",
+              "description": "%config.diagnostics.no-implicit-any%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "redefined-local": {
+              "default": "Opened",
+              "description": "%config.diagnostics.redefined-local%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "redundant-parameter": {
+              "default": "Opened",
+              "description": "%config.diagnostics.redundant-parameter%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "redundant-value": {
+              "default": "Opened",
+              "description": "%config.diagnostics.redundant-value%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "trailing-space": {
+              "default": "Opened",
+              "description": "%config.diagnostics.trailing-space%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unbalanced-assignments": {
+              "default": "Any",
+              "description": "%config.diagnostics.unbalanced-assignments%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-doc-class": {
+              "default": "Any",
+              "description": "%config.diagnostics.undefined-doc-class%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-doc-name": {
+              "default": "Any",
+              "description": "%config.diagnostics.undefined-doc-name%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-doc-param": {
+              "default": "Any",
+              "description": "%config.diagnostics.undefined-doc-param%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-env-child": {
+              "default": "Any",
+              "description": "%config.diagnostics.undefined-env-child%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-field": {
+              "default": "Opened",
+              "description": "%config.diagnostics.undefined-field%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-global": {
+              "default": "Any",
+              "description": "%config.diagnostics.undefined-global%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unknown-diag-code": {
+              "default": "Any",
+              "description": "%config.diagnostics.unknown-diag-code%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-function": {
+              "default": "Opened",
+              "description": "%config.diagnostics.unused-function%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-label": {
+              "default": "Opened",
+              "description": "%config.diagnostics.unused-label%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-local": {
+              "default": "Opened",
+              "description": "%config.diagnostics.unused-local%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-vararg": {
+              "default": "Opened",
+              "description": "%config.diagnostics.unused-vararg%",
+              "enum": [
+                "Any",
+                "Opened",
+                "None"
+              ],
+              "scope": "resource",
+              "type": "string"
+            }
+          },
+          "scope": "resource",
+          "title": "neededFileStatus",
+          "type": "object"
+        },
+        "Lua.diagnostics.severity": {
+          "markdownDescription": "Modified diagnostic severity.\n",
+          "properties": {
+            "ambiguity-1": {
+              "default": "Warning",
+              "description": "%config.diagnostics.ambiguity-1%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "circle-doc-class": {
+              "default": "Warning",
+              "description": "%config.diagnostics.circle-doc-class%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "close-non-object": {
+              "default": "Warning",
+              "description": "%config.diagnostics.close-non-object%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "code-after-break": {
+              "default": "Hint",
+              "description": "%config.diagnostics.code-after-break%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "count-down-loop": {
+              "default": "Warning",
+              "description": "%config.diagnostics.count-down-loop%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "deprecated": {
+              "default": "Warning",
+              "description": "%config.diagnostics.deprecated%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "doc-field-no-class": {
+              "default": "Warning",
+              "description": "%config.diagnostics.doc-field-no-class%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-doc-class": {
+              "default": "Warning",
+              "description": "%config.diagnostics.duplicate-doc-class%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-doc-field": {
+              "default": "Warning",
+              "description": "%config.diagnostics.duplicate-doc-field%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-doc-param": {
+              "default": "Warning",
+              "description": "%config.diagnostics.duplicate-doc-param%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-index": {
+              "default": "Warning",
+              "description": "%config.diagnostics.duplicate-index%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "duplicate-set-field": {
+              "default": "Warning",
+              "description": "%config.diagnostics.duplicate-set-field%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "empty-block": {
+              "default": "Hint",
+              "description": "%config.diagnostics.empty-block%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "global-in-nil-env": {
+              "default": "Warning",
+              "description": "%config.diagnostics.global-in-nil-env%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "lowercase-global": {
+              "default": "Information",
+              "description": "%config.diagnostics.lowercase-global%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "newfield-call": {
+              "default": "Warning",
+              "description": "%config.diagnostics.newfield-call%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "newline-call": {
+              "default": "Information",
+              "description": "%config.diagnostics.newline-call%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "no-implicit-any": {
+              "default": "Information",
+              "description": "%config.diagnostics.no-implicit-any%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "redefined-local": {
+              "default": "Hint",
+              "description": "%config.diagnostics.redefined-local%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "redundant-parameter": {
+              "default": "Hint",
+              "description": "%config.diagnostics.redundant-parameter%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "redundant-value": {
+              "default": "Hint",
+              "description": "%config.diagnostics.redundant-value%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "trailing-space": {
+              "default": "Hint",
+              "description": "%config.diagnostics.trailing-space%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unbalanced-assignments": {
+              "default": "Warning",
+              "description": "%config.diagnostics.unbalanced-assignments%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-doc-class": {
+              "default": "Warning",
+              "description": "%config.diagnostics.undefined-doc-class%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-doc-name": {
+              "default": "Warning",
+              "description": "%config.diagnostics.undefined-doc-name%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-doc-param": {
+              "default": "Warning",
+              "description": "%config.diagnostics.undefined-doc-param%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-env-child": {
+              "default": "Information",
+              "description": "%config.diagnostics.undefined-env-child%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-field": {
+              "default": "Warning",
+              "description": "%config.diagnostics.undefined-field%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "undefined-global": {
+              "default": "Warning",
+              "description": "%config.diagnostics.undefined-global%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unknown-diag-code": {
+              "default": "Waiting",
+              "description": "%config.diagnostics.unknown-diag-code%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-function": {
+              "default": "Hint",
+              "description": "%config.diagnostics.unused-function%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-label": {
+              "default": "Hint",
+              "description": "%config.diagnostics.unused-label%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-local": {
+              "default": "Hint",
+              "description": "%config.diagnostics.unused-local%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "unused-vararg": {
+              "default": "Hint",
+              "description": "%config.diagnostics.unused-vararg%",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint"
+              ],
+              "scope": "resource",
+              "type": "string"
+            }
+          },
+          "scope": "resource",
+          "title": "severity",
+          "type": "object"
+        },
+        "Lua.diagnostics.workspaceDelay": {
+          "default": 0,
+          "markdownDescription": "Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.diagnostics.workspaceRate": {
+          "default": 100,
+          "markdownDescription": "Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.hint.enable": {
+          "default": false,
+          "markdownDescription": "Enabel hint.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hint.paramName": {
+          "default": true,
+          "markdownDescription": "Hint parameter name when the parameter called is literal.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hint.paramType": {
+          "default": true,
+          "markdownDescription": "Show type hints at the parameter of the function.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hint.setType": {
+          "default": false,
+          "markdownDescription": "Hint type at assignment operation.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hover.enable": {
+          "default": true,
+          "markdownDescription": "Enable hover.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hover.enumsLimit": {
+          "default": 5,
+          "markdownDescription": "When the value corresponds to multiple types, limit the number of types displaying.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.hover.previewFields": {
+          "default": 20,
+          "markdownDescription": "When hovering to view a table, limits the maximum number of previews for fields.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.hover.viewNumber": {
+          "default": true,
+          "markdownDescription": "Hover to view numeric content (only if literal is not decimal).",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hover.viewString": {
+          "default": true,
+          "markdownDescription": "Hover to view the contents of a string (only if the literal contains an escape character).",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.hover.viewStringMax": {
+          "default": 1000,
+          "markdownDescription": "The maximum length of a hover to view the contents of a string.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.misc.parameters": {
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "[Command line parameters](https://github.com/sumneko/lua-telemetry-server/tree/master/method) when starting the language service in VSCode.",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.runtime.builtin": {
+          "markdownDescription": "Adjust the enabled state of the built-in library. You can disable (or redefine) the non-existent library according to the actual runtime environment.\n\n* `default`: Indicates that the library will be enabled or disabled according to the runtime version\n* `enable`: always enable\n* `disable`: always disable\n",
+          "properties": {
+            "basic": {
+              "default": "default",
+              "description": "%config.runtime.builtin.basic%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "bit": {
+              "default": "default",
+              "description": "%config.runtime.builtin.bit%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "bit32": {
+              "default": "default",
+              "description": "%config.runtime.builtin.bit32%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "builtin": {
+              "default": "default",
+              "description": "%config.runtime.builtin.builtin%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "coroutine": {
+              "default": "default",
+              "description": "%config.runtime.builtin.coroutine%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "debug": {
+              "default": "default",
+              "description": "%config.runtime.builtin.debug%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "ffi": {
+              "default": "default",
+              "description": "%config.runtime.builtin.ffi%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "io": {
+              "default": "default",
+              "description": "%config.runtime.builtin.io%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "jit": {
+              "default": "default",
+              "description": "%config.runtime.builtin.jit%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "math": {
+              "default": "default",
+              "description": "%config.runtime.builtin.math%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "os": {
+              "default": "default",
+              "description": "%config.runtime.builtin.os%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "package": {
+              "default": "default",
+              "description": "%config.runtime.builtin.package%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "string": {
+              "default": "default",
+              "description": "%config.runtime.builtin.string%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "table": {
+              "default": "default",
+              "description": "%config.runtime.builtin.table%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            },
+            "utf8": {
+              "default": "default",
+              "description": "%config.runtime.builtin.utf8%",
+              "enum": [
+                "default",
+                "enable",
+                "disable"
+              ],
+              "scope": "resource",
+              "type": "string"
+            }
+          },
+          "scope": "resource",
+          "type": "object"
+        },
+        "Lua.runtime.fileEncoding": {
+          "default": "utf8",
+          "enum": [
+            "utf8",
+            "ansi"
+          ],
+          "markdownDescription": "File encoding. The `ansi` option is only available under the `Windows` platform.",
+          "scope": "resource",
+          "type": "string"
+        },
+        "Lua.runtime.nonstandardSymbol": {
+          "items": {
+            "enum": [
+              "//",
+              "/**/",
+              "`",
+              "+=",
+              "-=",
+              "*=",
+              "/=",
+              "||",
+              "&&",
+              "!",
+              "!=",
+              "continue"
+            ],
+            "type": "string"
+          },
+          "markdownDescription": "Supports non-standard symbols. Make sure that your runtime environment supports these symbols.",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.runtime.path": {
+          "default": [
+            "?.lua",
+            "?/init.lua",
+            "?/?.lua"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "`package.path`",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.runtime.plugin": {
+          "default": "",
+          "markdownDescription": "Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugin) to learn more.",
+          "scope": "resource",
+          "type": "string"
+        },
+        "Lua.runtime.special": {
+          "markdownDescription": "The custom global variables are regarded as some special built-in variables, and the language server will provide special support\nThe following example shows that 'include' is treated as' require '.\n```json\n\"Lua.runtime.special\" : {\n    \"include\" : \"require\"\n}\n```\n",
+          "patternProperties": {
+            ".*": {
+              "default": "require",
+              "enum": [
+                "_G",
+                "rawset",
+                "rawget",
+                "setmetatable",
+                "require",
+                "dofile",
+                "loadfile",
+                "pcall",
+                "xpcall"
+              ],
+              "scope": "resource",
+              "type": "string"
+            }
+          },
+          "scope": "resource",
+          "type": "object"
+        },
+        "Lua.runtime.unicodeName": {
+          "default": false,
+          "markdownDescription": "Allows Unicode characters in name.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.runtime.version": {
+          "default": "Lua 5.4",
+          "enum": [
+            "Lua 5.1",
+            "Lua 5.2",
+            "Lua 5.3",
+            "Lua 5.4",
+            "LuaJIT"
+          ],
+          "markdownDescription": "Lua runtime version.",
+          "scope": "resource",
+          "type": "string"
+        },
+        "Lua.signatureHelp.enable": {
+          "default": true,
+          "markdownDescription": "Enable signature help.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.telemetry.enable": {
+          "default": null,
+          "markdownDescription": "Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Privacy-Policy).\n",
+          "scope": "resource",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "Lua.window.progressBar": {
+          "default": true,
+          "markdownDescription": "Show progress bar in status bar.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.window.statusBar": {
+          "default": true,
+          "markdownDescription": "Show extension status in status bar.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.workspace.checkThirdParty": {
+          "default": true,
+          "markdownDescription": "Automatic detection and adaptation of third-party libraries, currently supported libraries are:\n    * OpenResty\n    * Cocos4.0\n    * Jass\n",
+          "scope": "source",
+          "type": "boolean"
+        },
+        "Lua.workspace.ignoreDir": {
+          "default": [
+            ".vscode"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Ignored files and directories (Use `.gitignore` grammar).\n",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.workspace.ignoreSubmodules": {
+          "default": true,
+          "markdownDescription": "Ignore submodules.",
+          "scope": "resource",
+          "type": "boolean"
+        },
+        "Lua.workspace.library": {
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "The directory path of the external function library.\nThe language service will additionally load the lua files in these directories, even if they are not in the current workspace, for definition, completion and other features.\n",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.workspace.maxPreload": {
+          "default": 1000,
+          "markdownDescription": "Max preloaded files.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.workspace.preloadFileSize": {
+          "default": 100,
+          "markdownDescription": "Skip files larger than this value (KB) when preloading.",
+          "scope": "resource",
+          "type": "integer"
+        },
+        "Lua.workspace.useGitIgnore": {
+          "default": true,
+          "markdownDescription": "Ignore files list in `.gitignore` .",
+          "scope": "resource",
+          "type": "boolean"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "sumneko-lua.install",
+        "title": "Install or update sumneko lua-language-server",
+        "category": "Sumneko lua-language-server"
+      },
+      {
+        "command": "sumneko-lua.restart",
+        "title": "Restart server",
+        "category": "Sumneko lua-language-server"
+      },
+      {
+        "command": "sumneko-lua.version",
+        "title": "Echo server version",
+        "category": "Sumneko lua-language-server"
+      }
+    ]
+  }
+}

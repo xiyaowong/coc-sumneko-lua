@@ -1,0 +1,19 @@
+{
+  "sumneko-lua.enable": {
+    "type": "boolean",
+    "default": true,
+    "description": "Enable coc-sumneko-lua extension"
+  },
+  "sumneko-lua.prompt": {
+    "type": "boolean",
+    "default": true,
+    "description": "Prompt when server is not found"
+  },
+  "sumneko-lua.locale": {
+    "type": "string",
+    "default": "en-us",
+    "enum": ["en-us", "zh-cn"],
+    "description": "The localized language used",
+    "enumDescriptions": ["`\"en-us\"` In English", "`\"zh-cn\"` In Chinese"]
+  }
+}
