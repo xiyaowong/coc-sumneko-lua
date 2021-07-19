@@ -188,9 +188,10 @@ The following example shows that 'include' is treated as' require '.
 - type: `boolean`
 - default: `true`
 - description:    Automatic detection and adaptation of third-party libraries, currently supported libraries are:
-    * OpenResty
-    * Cocos4.0
-    * Jass
+
+* OpenResty
+* Cocos4.0
+* Jass
 
 ## `Lua.workspace.ignoreDir`
 - type: `array`
@@ -219,3 +220,7 @@ The language service will additionally load the lua files in these directories, 
 - type: `boolean`
 - default: `true`
 - description:    Ignore files list in `.gitignore` .
+## `Lua.workspace.userThirdParty`
+- type: `array`
+- default: `undefined`
+- description:    Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/sumneko/lua-language-server/tree/master/meta/3rd)

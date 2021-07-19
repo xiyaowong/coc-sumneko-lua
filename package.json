@@ -1349,8 +1349,8 @@
         },
         "Lua.workspace.checkThirdParty": {
           "default": true,
-          "markdownDescription": "Automatic detection and adaptation of third-party libraries, currently supported libraries are:\n    * OpenResty\n    * Cocos4.0\n    * Jass\n",
-          "scope": "source",
+          "markdownDescription": "Automatic detection and adaptation of third-party libraries, currently supported libraries are:\n\n* OpenResty\n* Cocos4.0\n* Jass\n",
+          "scope": "resource",
           "type": "boolean"
         },
         "Lua.workspace.ignoreDir": {
@@ -1395,6 +1395,14 @@
           "markdownDescription": "Ignore files list in `.gitignore` .",
           "scope": "resource",
           "type": "boolean"
+        },
+        "Lua.workspace.userThirdParty": {
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/sumneko/lua-language-server/tree/master/meta/3rd)",
+          "scope": "resource",
+          "type": "array"
         }
       }
     },
