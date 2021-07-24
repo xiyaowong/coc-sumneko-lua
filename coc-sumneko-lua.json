@@ -15,5 +15,10 @@
     "enum": ["en-us", "zh-cn"],
     "description": "The localized language used",
     "enumDescriptions": ["`\"en-us\"` In English", "`\"zh-cn\"` In Chinese"]
+  },
+  "sumneko-lua.enableNvimLuaDev": {
+    "type": "boolean",
+    "default": false,
+    "description": "Enable the nvim lua development"
   }
 }

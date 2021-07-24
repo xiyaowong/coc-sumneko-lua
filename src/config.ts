@@ -21,4 +21,8 @@ export class Config {
   get locale() {
     return this.cfg.get<Locale>('locale');
   }
+
+  get nvimLuaDev() {
+    return this.cfg.get<boolean>('enableNvimLuaDev');
+  }
 }

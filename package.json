@@ -79,6 +79,11 @@
             "`\"zh-cn\"` In Chinese"
           ]
         },
+        "sumneko-lua.enableNvimLuaDev": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable the nvim lua development"
+        },
         "Lua.color.mode": {
           "default": "Semantic",
           "enum": [
@@ -1349,7 +1354,7 @@
         },
         "Lua.workspace.checkThirdParty": {
           "default": true,
-          "markdownDescription": "Automatic detection and adaptation of third-party libraries, currently supported libraries are:\n\n* OpenResty\n* Cocos4.0\n* Jass\n",
+          "markdownDescription": "Automatic detection and adaptation of third-party libraries, currently supported libraries are:\n\n* OpenResty\n* Cocos4.0\n* LÖVE\n* Jass\n",
           "scope": "resource",
           "type": "boolean"
         },

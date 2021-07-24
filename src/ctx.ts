@@ -7,6 +7,7 @@ import {
   ServerOptions,
   services,
   window,
+  workspace,
 } from 'coc.nvim';
 import executable from 'executable';
 import * as fs from 'fs-extra';
@@ -112,10 +113,36 @@ export class Ctx {
     }
 
     const [command, args] = bin;
-    const serverOptions: ServerOptions = { command, args };
+
+    let initializationOptions = workspace.getConfiguration('Lua');
+    if (this.config.nvimLuaDev) {
+      let workspace_ = initializationOptions.workspace;
+
+      const library = workspace_.library || [];
+
+      const runtime = await workspace.nvim.call('expand', ['$VIMRUNTIME/lua']);
+      if (!library.includes(runtime)) {
+        library.push(runtime);
+      }
+      const types = `${path.dirname(path.dirname(__filename))}/nvim_lua_types`;
+      if (!library.includes(types)) {
+        library.push(types);
+      }
+
+      workspace_ = { ...workspace_, library: library };
+
+      initializationOptions = { ...initializationOptions, workspace: workspace_ };
+    }
+
+    console.log(initializationOptions);
+
+    const serverOptions: ServerOptions = {command, args};
+
     const clientOptions: LanguageClientOptions = {
       documentSelector: [{ language: 'lua' }],
+      initializationOptions,
     };
+
     const client = new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
 
     this.extCtx.subscriptions.push(services.registLanguageClient(client));

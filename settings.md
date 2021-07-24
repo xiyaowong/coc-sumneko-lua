@@ -15,6 +15,10 @@
 - type: `string`
 - default: `en-us`
 - description:    The localized language used
+## `sumneko-lua.enableNvimLuaDev`
+- type: `boolean`
+- default: `false`
+- description:    Enable the nvim lua development
 ## `Lua.color.mode`
 - type: `string`
 - default: `Semantic`
@@ -191,6 +195,7 @@ The following example shows that 'include' is treated as' require '.
 
 * OpenResty
 * Cocos4.0
+* LÖVE
 * Jass
 
 ## `Lua.workspace.ignoreDir`
