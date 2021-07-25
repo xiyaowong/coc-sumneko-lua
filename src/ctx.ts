@@ -114,37 +114,53 @@ export class Ctx {
 
     const [command, args] = bin;
 
-    let initializationOptions = workspace.getConfiguration('Lua');
-    if (this.config.nvimLuaDev) {
-      let workspace_ = initializationOptions.workspace;
-
-      const library = workspace_.library || [];
-
-      const runtime = await workspace.nvim.call('expand', ['$VIMRUNTIME/lua']);
-      if (!library.includes(runtime)) {
-        library.push(runtime);
-      }
-      const types = `${path.dirname(path.dirname(__filename))}/nvim_lua_types`;
-      if (!library.includes(types)) {
-        library.push(types);
-      }
-
-      workspace_ = { ...workspace_, library: library };
-
-      initializationOptions = { ...initializationOptions, workspace: workspace_ };
-    }
-
-    console.log(initializationOptions);
-
-    const serverOptions: ServerOptions = {command, args};
+    const serverOptions: ServerOptions = { command, args };
 
     const clientOptions: LanguageClientOptions = {
       documentSelector: [{ language: 'lua' }],
-      initializationOptions,
+      middleware: {
+        workspace: {
+          configuration: async (params, token, next) => {
+            const result = await next(params, token);
+
+            if (!this.config.nvimLuaDev || !Array.isArray(result)) {
+              return result;
+            }
+
+            const sectionIndex = params.items.findIndex((item) => {
+              if (item.section == 'Lua') {
+                return true;
+              }
+            });
+
+            if (sectionIndex == -1) {
+              return result;
+            }
+
+            const configuration = result[sectionIndex];
+
+            const library = configuration.workspace.library || [];
+
+            const runtime = await workspace.nvim.call('expand', ['$VIMRUNTIME/lua']);
+            if (!library.includes(runtime)) {
+              library.push(runtime);
+            }
+            const types = `${path.dirname(path.dirname(__filename))}/nvim_lua_types`;
+            if (!library.includes(types)) {
+              library.push(types);
+            }
+
+            configuration.workspace.library = library;
+
+            result[sectionIndex] = configuration;
+
+            return result;
+          },
+        },
+      },
     };
 
     const client = new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
-
     this.extCtx.subscriptions.push(services.registLanguageClient(client));
     this.client = client;
   }
