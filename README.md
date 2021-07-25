@@ -4,6 +4,11 @@ Lua extension using sumneko lua-language-server for coc.nvim
 
 This extension uses server binaries extracted from [`sumneko/vscode-lua`](https://github.com/sumneko/vscode-lua)
 
+## Features
+
+- Supported features by the server
+- Nvim lua development(check setting `sumneko-lua.enableNvimLuaDev`). Credit: [folke/lua-dev.nvim](https://github.com/folke/lua-dev.nvim)
+
 ## Install
 
 `:CocInstall coc-sumneko-lua`
