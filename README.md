@@ -13,7 +13,7 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 
 `:CocInstall coc-sumneko-lua`
 
-## [Settings](https://github.com/xiyaowong/coc-sumneko-lua/blob/main/settings.md)
+## [Settings(Click me)](https://github.com/xiyaowong/coc-sumneko-lua/blob/main/settings.md)
 
 ## Commands
 
