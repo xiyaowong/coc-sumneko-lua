@@ -73,7 +73,7 @@ export class Ctx {
       return;
     }
 
-    const latestV = latest.tag.match(/\d.*/);
+    const latestV = latest.version.match(/\d.*/);
     if (!latestV) {
       return;
     }
@@ -82,7 +82,7 @@ export class Ctx {
       return;
     }
 
-    const msg = `Sumneko lua-language-server has a new release: ${latest.tag}, you're using v${old}.`;
+    const msg = `Sumneko lua-language-server has a new release: ${latest.version}, you're using v${old}.`;
     if (this.config.prompt) {
       const ret = await window.showQuickpick(['Download the latest server', 'Cancel'], msg);
       if (ret === 0) {
