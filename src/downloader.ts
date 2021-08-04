@@ -6,40 +6,51 @@ import * as fs from 'fs-extra';
 
 const ls_name = 'sumneko-lua-ls';
 
-interface Asset {
-  name: string;
-  browser_download_url: string;
-}
-
-interface GithubRelease {
-  tag_name: string;
-  published_at: string;
-  assets: Array<Asset>;
-}
-
-export interface ReleaseTag {
-  tag: string;
+export interface Release {
+  version: string;
   url: string;
-  asset?: Asset;
 }
 
-export async function getLatestRelease(): Promise<ReleaseTag | undefined> {
-  const releaseURL = 'https://api.github.com/repos/sumneko/vscode-lua/releases/latest';
-  const response = await fetch(releaseURL);
+export async function getLatestRelease(): Promise<Release | undefined> {
+  const response = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery ', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json;api-version=6.1-preview.1;',
+      'Content-Type': 'application/json',
+      'user-agent': 'VSCode',
+    },
+    body: JSON.stringify({
+      filters: [
+        {
+          criteria: [
+            {
+              filterType: 4,
+              value: '3a15b5a7-be12-47e3-8445-88ee3eabc8b2',
+            },
+          ],
+        },
+      ],
+      flags: 950,
+    }),
+  });
+
   if (!response.ok) {
     console.error(await response.text());
     return;
   }
 
-  const release: GithubRelease = await response.json();
-  const asset = release.assets[0];
+  const release = await response.json();
 
-  const tag = release.tag_name;
+  // TODO: validate data
+  const extension = release.results[0].extensions[0].versions[0];
 
-  return { asset, tag, url: asset.browser_download_url };
+  return {
+    version: extension.version,
+    url: `${extension.assetUri}/Microsoft.VisualStudio.Services.VSIXPackage`,
+  };
 }
 
-export async function downloadServer(context: ExtensionContext, release?: ReleaseTag): Promise<void> {
+export async function downloadServer(context: ExtensionContext, release?: Release): Promise<void> {
   const statusItem = window.createStatusBarItem(0, { progress: true });
   statusItem.show();
 
@@ -55,7 +66,7 @@ export async function downloadServer(context: ExtensionContext, release?: Releas
 
   statusItem.text = 'Downloading latest sumneko lua-language-server';
 
-  const resp = await fetch(release.url);
+  const resp = await fetch(release.url, { headers: { 'user-agent': 'VSCode' } });
   if (!resp.ok) {
     statusItem.hide();
     throw new Error('Request failed');
