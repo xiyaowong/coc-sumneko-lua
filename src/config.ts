@@ -25,4 +25,8 @@ export class Config {
   get nvimLuaDev() {
     return this.cfg.get<boolean>('enableNvimLuaDev');
   }
+
+  get checkUpdate() {
+    return this.cfg.get<boolean>('checkUpdate');
+  }
 }

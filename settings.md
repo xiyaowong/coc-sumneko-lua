@@ -19,6 +19,10 @@
 - type: `boolean`
 - default: `false`
 - description:    Enable the nvim lua development
+## `sumneko-lua.checkUpdate`
+- type: `boolean`
+- default: `true`
+- description:    Automatically check for updates after startup
 ## `Lua.color.mode`
 - type: `string`
 - default: `Semantic`

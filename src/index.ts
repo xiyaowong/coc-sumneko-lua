@@ -57,5 +57,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   });
 
   await ctx.startServer();
-  await ctx.checkUpdate();
+  if (ctx.config.checkUpdate) {
+    await ctx.checkUpdate();
+  }
 }
