@@ -1,6 +1,6 @@
 import { ExtensionContext, window } from 'coc.nvim';
 import extract from 'extract-zip';
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 import path from 'path';
 import * as fs from 'fs-extra';
 
@@ -12,27 +12,37 @@ export interface Release {
 }
 
 export async function getLatestRelease(): Promise<Release | undefined> {
-  const response = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery ', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json;api-version=6.1-preview.1;',
-      'Content-Type': 'application/json',
-      'user-agent': 'VSCode',
-    },
-    body: JSON.stringify({
-      filters: [
-        {
-          criteria: [
-            {
-              filterType: 4,
-              value: '3a15b5a7-be12-47e3-8445-88ee3eabc8b2',
-            },
-          ],
-        },
-      ],
-      flags: 950,
-    }),
+  const headers = {
+    Accept: 'application/json;api-version=6.1-preview.1;',
+    'Content-Type': 'application/json',
+    'user-agent': 'VSCode',
+  };
+  const body = JSON.stringify({
+    filters: [
+      {
+        criteria: [
+          {
+            filterType: 4,
+            value: '3a15b5a7-be12-47e3-8445-88ee3eabc8b2',
+          },
+        ],
+      },
+    ],
+    flags: 950,
   });
+  let response: Response;
+  try {
+    response = await fetch('https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery ', {
+      method: 'POST',
+      headers: headers,
+      body: body,
+      timeout: 10e3,
+    });
+  } catch (err) {
+    window.showErrorMessage(`[coc-sumneko]: Request failed! Please check your internet!`);
+    console.error(err);
+    return;
+  }
 
   if (!response.ok) {
     console.error(await response.text());
