@@ -6,6 +6,7 @@ import {
   LanguageClientOptions,
   ServerOptions,
   services,
+  TextDocument,
   window,
   workspace,
 } from 'coc.nvim';
@@ -15,14 +16,25 @@ import versionCompare from 'node-version-compare';
 import path from 'path';
 import { Config } from './config';
 import { downloadServer, getLatestRelease } from './downloader';
+import { InlayHintsController } from './inlay_hints';
+
+export type LuaDocument = TextDocument & { languageId: 'lua' };
+export function isLuaDocument(document: TextDocument): document is LuaDocument {
+  const ret = document.languageId === 'lua';
+  return ret;
+}
 
 export type Cmd = (...args: any[]) => unknown;
 
 export class Ctx {
   client!: LanguageClient;
   public readonly config = new Config();
+  private inlayHintsController: InlayHintsController;
 
-  constructor(public readonly extCtx: ExtensionContext) {}
+  constructor(public readonly extCtx: ExtensionContext) {
+    this.inlayHintsController = new InlayHintsController(this);
+    this.extCtx.subscriptions.push(this.inlayHintsController);
+  }
 
   registerCommand(name: string, factory: (ctx: Ctx) => Cmd, internal = false) {
     const fullName = `sumneko-lua.${name}`;
@@ -162,6 +174,16 @@ export class Ctx {
 
     const client = new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
     this.extCtx.subscriptions.push(services.registLanguageClient(client));
+    await client.onReady();
     this.client = client;
+  }
+
+  async activateInlayHints() {
+    await workspace.nvim.command('hi default link CocLuaTypeHint  CocCodeLens');
+    await workspace.nvim.command('hi default link CocLuaParamHint CocCodeLens');
+
+    if (this.config.inlayHints) {
+      this.inlayHintsController.activate();
+    }
   }
 }

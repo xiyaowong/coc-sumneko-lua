@@ -29,4 +29,15 @@ export class Config {
   get checkUpdate() {
     return this.cfg.get<boolean>('checkUpdate');
   }
+
+  get inlayHints() {
+    const hasVirtualText = workspace.isNvim && workspace.nvim.hasFunction('nvim_buf_set_virtual_text');
+    return {
+      enable: hasVirtualText && workspace.getConfiguration('Lua.hint').get<boolean>('enable', false),
+      typeHintsPrefix: this.cfg.get<string>('inlayHints.typeHintsPrefix', '« '),
+      paramHintsPrefix: this.cfg.get<string>('inlayHints.paramHintsPrefix', '» '),
+      trimSemicolon: this.cfg.get<boolean>('inlayHints.trimSemicolon', true),
+      refreshOnInsertMode: hasVirtualText && this.cfg.get<boolean>('inlayHints.refreshOnInsertMode', false),
+    };
+  }
 }

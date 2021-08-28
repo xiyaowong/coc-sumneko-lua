@@ -57,6 +57,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   });
 
   await ctx.startServer();
+  await ctx.activateInlayHints();
   if (ctx.config.checkUpdate) {
     await ctx.checkUpdate();
   }
