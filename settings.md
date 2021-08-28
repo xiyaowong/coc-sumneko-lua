@@ -47,14 +47,22 @@
 - type: `string`
 - default: `Replace`
 - description:    Shows keyword syntax snippets.
+## `Lua.completion.requireSeparator`
+- type: `string`
+- default: `.`
+- description:    The separator used when `require`.
 ## `Lua.completion.showParams`
 - type: `boolean`
 - default: `true`
 - description:    Display parameters in completion list. When the function has multiple definitions, they will be displayed separately.
+## `Lua.completion.showWord`
+- type: `string`
+- default: `Fallback`
+- description:    Show contextual words in suggestions.
 ## `Lua.completion.workspaceWord`
 - type: `boolean`
 - default: `true`
-- description:    Shows words within the workspace.
+- description:    Whether the displayed context word contains the content of other files in the workspace.
 ## `Lua.diagnostics.disable`
 - type: `array`
 - default: `undefined`
@@ -69,6 +77,14 @@
 - default: `undefined`
 - description:    Defined global variables.
 
+## `Lua.diagnostics.ignoredFiles`
+- type: `string`
+- default: `Disable`
+- description:    How to diagnose ignored files.
+## `Lua.diagnostics.libraryFiles`
+- type: `string`
+- default: `Disable`
+- description:    How to diagnose files loaded via `Lua.workspace.library`.
 ## `Lua.diagnostics.neededFileStatus`
 - type: `object`
 - default: `undefined`
@@ -92,9 +108,9 @@
 - default: `false`
 - description:    Enabel hint.
 ## `Lua.hint.paramName`
-- type: `boolean`
-- default: `true`
-- description:    Hint parameter name when the parameter called is literal.
+- type: `string`
+- default: `All`
+- description:    Show hints of parameter name at the function call.
 ## `Lua.hint.paramType`
 - type: `boolean`
 - default: `true`
@@ -102,7 +118,7 @@
 ## `Lua.hint.setType`
 - type: `boolean`
 - default: `false`
-- description:    Hint type at assignment operation.
+- description:    Show hints of type at assignment operation.
 ## `Lua.hover.enable`
 - type: `boolean`
 - default: `true`
@@ -150,8 +166,11 @@
 - description:    Supports non-standard symbols. Make sure that your runtime environment supports these symbols.
 ## `Lua.runtime.path`
 - type: `array`
-- default: `?.lua,?/init.lua,?/?.lua`
-- description:    `package.path`
+- default: `?.lua,?/init.lua`
+- description:    When using `require`, how to find the file based on the input name.
+Setting this config to `?/init.lua` means that when you enter `require 'myfile'`, all `**/myfile/init.lua` will be searched from the loaded files.
+If you want to load files outside the workspace, you need to set `Lua.workspace.library` first.
+
 ## `Lua.runtime.plugin`
 - type: `string`
 - default: ``
@@ -214,9 +233,7 @@ The following example shows that 'include' is treated as' require '.
 ## `Lua.workspace.library`
 - type: `array`
 - default: `undefined`
-- description:    The directory path of the external function library.
-The language service will additionally load the lua files in these directories, even if they are not in the current workspace, for definition, completion and other features.
-
+- description:    In addition to the current workspace, which directories will load files from.
 ## `Lua.workspace.maxPreload`
 - type: `integer`
 - default: `1000`
