@@ -90,7 +90,6 @@ export class InlayHintsController implements Disposable {
   }
 
   private async renderHints(doc: Document, hints: InlayHint[]) {
-    console.log(hints);
     doc.buffer.clearNamespace(inlayHintsNS);
 
     const newHints: { [key: string]: { typeHints: string[]; paramHints: string[] } } = {};
@@ -116,11 +115,7 @@ export class InlayHintsController implements Disposable {
       }
 
       if (typeHints.length > 0) {
-        let padding = '';
-        if (chunks.length > 0) {
-          padding = ' ';
-        }
-        chunks.push([`${padding}${this.inlayTypeHintsPrefix}${typeHints.join(', ')}`, 'CocLuaTypeHint']);
+        chunks.push([` ${this.inlayTypeHintsPrefix}${typeHints.join(', ')}`, 'CocLuaTypeHint']);
       }
 
       doc.buffer.setVirtualText(inlayHintsNS, Number(line), chunks, {});
