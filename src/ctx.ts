@@ -189,7 +189,9 @@ export class Ctx {
     this.client.onNotification('$/status/show', bar.show);
     this.client.onNotification('$/status/hide', bar.hide);
     this.client.onNotification('$/status/report', (params) => {
-      bar.text = params.text;
+      const text: string = params.text;
+      bar.isProgress = text.includes('$(loading~spin)');
+      bar.text = text.replace('$(loading~spin)', '');
       this.barTooltip = params.tooltip;
     });
 
