@@ -127,6 +127,9 @@ export class Ctx {
 
     const clientOptions: LanguageClientOptions = {
       documentSelector: [{ language: 'lua' }],
+      initializationOptions: {
+        changeConfiguration: true,
+      },
       middleware: {
         workspace: {
           configuration: async (params, token, next) => {
@@ -172,14 +175,20 @@ export class Ctx {
     const client = new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
     this.extCtx.subscriptions.push(services.registLanguageClient(client));
     await client.onReady();
+    this.client = client;
+    // activate components
+    this.activateCommand();
+    this.activateStatusBar();
+  }
 
+  activateStatusBar() {
     // window status bar
     const bar = window.createStatusBarItem();
     this.extCtx.subscriptions.push(bar);
 
-    client.onNotification('$/status/show', bar.show);
-    client.onNotification('$/status/hide', bar.hide);
-    client.onNotification('$/status/report', (params) => {
+    this.client.onNotification('$/status/show', bar.show);
+    this.client.onNotification('$/status/hide', bar.hide);
+    this.client.onNotification('$/status/report', (params) => {
       bar.text = params.text;
       this.barTooltip = params.tooltip;
     });
@@ -197,8 +206,32 @@ export class Ctx {
       null,
       this.extCtx.subscriptions
     );
+  }
 
-    //
-    this.client = client;
+  activateCommand() {
+    this.client.onNotification('$/command', (params) => {
+      if (params.command != 'lua.config') {
+        return;
+      }
+      for (const data of params.data) {
+        const config = workspace.getConfiguration(undefined, data.uri);
+        if (data.action == 'add') {
+          const value: any[] = config.get(data.key, []);
+          value.push(data.value);
+          config.update(data.key, value, data.global);
+          continue;
+        }
+        if (data.action == 'set') {
+          config.update(data.key, data.value, data.global);
+          continue;
+        }
+        if (data.action == 'prop') {
+          const value: { [key: string]: any } = config.get(data.key, {});
+          value[data.prop] = data.value;
+          config.update(data.key, value, data.global);
+          continue;
+        }
+      }
+    });
   }
 }
