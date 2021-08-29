@@ -18,11 +18,12 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 
 ## Commands
 
-| Command               | Description                                   |
-| --------------------- | --------------------------------------------- |
-| `sumneko-lua.install` | Install or update sumneko lua-language-server |
-| `sumneko-lua.restart` | Restart server                                |
-| `sumneko-lua.version` | Echo server version                           |
+| Command                   | Description                                   |
+| ------------------------- | --------------------------------------------- |
+| `sumneko-lua.install`     | Install or update sumneko lua-language-server |
+| `sumneko-lua.restart`     | Restart server                                |
+| `sumneko-lua.version`     | Echo server version                           |
+| `sumneko-lua.showTooltip` | Show tooltips                                 |
 
 ## Credit
 

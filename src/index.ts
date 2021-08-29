@@ -55,6 +55,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       window.showMessage(`Reloaded sumneko lua-language-server`);
     };
   });
+  ctx.registerCommand('showTooltip', cmds.showTooltip);
 
   await ctx.startServer();
   await ctx.activateInlayHints();

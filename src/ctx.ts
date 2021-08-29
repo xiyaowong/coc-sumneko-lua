@@ -1,6 +1,7 @@
 import {
   commands,
   Disposable,
+  events,
   ExtensionContext,
   LanguageClient,
   LanguageClientOptions,
@@ -30,6 +31,7 @@ export class Ctx {
   client!: LanguageClient;
   public readonly config = new Config();
   private inlayHintsController: InlayHintsController;
+  barTooltip = '';
 
   constructor(public readonly extCtx: ExtensionContext) {
     this.inlayHintsController = new InlayHintsController(this);
@@ -130,6 +132,9 @@ export class Ctx {
 
     const clientOptions: LanguageClientOptions = {
       documentSelector: [{ language: 'lua' }],
+      initializationOptions: {
+        changeConfiguration: true,
+      },
       middleware: {
         workspace: {
           configuration: async (params, token, next) => {
@@ -176,6 +181,66 @@ export class Ctx {
     this.extCtx.subscriptions.push(services.registLanguageClient(client));
     await client.onReady();
     this.client = client;
+    // activate components
+    this.activateCommand();
+    this.activateStatusBar();
+    await this.activateInlayHints();
+  }
+
+  activateStatusBar() {
+    // window status bar
+    const bar = window.createStatusBarItem();
+    this.extCtx.subscriptions.push(bar);
+
+    this.client.onNotification('$/status/show', bar.show);
+    this.client.onNotification('$/status/hide', bar.hide);
+    this.client.onNotification('$/status/report', (params) => {
+      const text: string = params.text;
+      bar.isProgress = text.includes('$(loading~spin)');
+      bar.text = text.replace('$(loading~spin)', '');
+      this.barTooltip = params.tooltip;
+    });
+
+    events.on(
+      'BufEnter',
+      async () => {
+        const doc = await workspace.document;
+        if (isLuaDocument(doc.textDocument)) {
+          bar.show();
+        } else {
+          bar.hide();
+        }
+      },
+      null,
+      this.extCtx.subscriptions
+    );
+  }
+
+  activateCommand() {
+    this.client.onNotification('$/command', (params) => {
+      if (params.command != 'lua.config') {
+        return;
+      }
+      for (const data of params.data) {
+        const config = workspace.getConfiguration(undefined, data.uri);
+        if (data.action == 'add') {
+          const value: any[] = config.get(data.key, []);
+          value.push(data.value);
+          config.update(data.key, value, data.global);
+          continue;
+        }
+        if (data.action == 'set') {
+          config.update(data.key, data.value, data.global);
+          continue;
+        }
+        if (data.action == 'prop') {
+          const value: { [key: string]: any } = config.get(data.key, {});
+          value[data.prop] = data.value;
+          config.update(data.key, value, data.global);
+          continue;
+        }
+      }
+    });
   }
 
   async activateInlayHints() {
