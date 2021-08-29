@@ -1517,6 +1517,11 @@
         "command": "sumneko-lua.version",
         "title": "Echo server version",
         "category": "Sumneko lua-language-server"
+      },
+      {
+        "command": "sumneko-lua.showTooltip",
+        "title": "Show tooltips",
+        "category": "Sumneko lua-language-server"
       }
     ]
   }

@@ -23,3 +23,9 @@ export function version(ctx: Ctx): Cmd {
     window.showMessage(packageData.version);
   };
 }
+
+export function showTooltip(ctx: Ctx): Cmd {
+  return async () => {
+    window.showNotification({ content: ctx.barTooltip, timeout: 5000 });
+  };
+}

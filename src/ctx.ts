@@ -1,11 +1,13 @@
 import {
   commands,
   Disposable,
+  events,
   ExtensionContext,
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   services,
+  TextDocument,
   window,
   workspace,
 } from 'coc.nvim';
@@ -16,11 +18,18 @@ import path from 'path';
 import { Config } from './config';
 import { downloadServer, getLatestRelease } from './downloader';
 
+export type LuaDocument = TextDocument & { languageId: 'lua' };
+export function isLuaDocument(document: TextDocument): document is LuaDocument {
+  const ret = document.languageId === 'lua';
+  return ret;
+}
+
 export type Cmd = (...args: any[]) => unknown;
 
 export class Ctx {
   client!: LanguageClient;
   public readonly config = new Config();
+  barTooltip = '';
 
   constructor(public readonly extCtx: ExtensionContext) {}
 
@@ -162,6 +171,34 @@ export class Ctx {
 
     const client = new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
     this.extCtx.subscriptions.push(services.registLanguageClient(client));
+    await client.onReady();
+
+    // window status bar
+    const bar = window.createStatusBarItem();
+    this.extCtx.subscriptions.push(bar);
+
+    client.onNotification('$/status/show', bar.show);
+    client.onNotification('$/status/hide', bar.hide);
+    client.onNotification('$/status/report', (params) => {
+      bar.text = params.text;
+      this.barTooltip = params.tooltip;
+    });
+
+    events.on(
+      'BufEnter',
+      async () => {
+        const doc = await workspace.document;
+        if (isLuaDocument(doc.textDocument)) {
+          bar.show();
+        } else {
+          bar.hide();
+        }
+      },
+      null,
+      this.extCtx.subscriptions
+    );
+
+    //
     this.client = client;
   }
 }
