@@ -58,7 +58,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
   ctx.registerCommand('showTooltip', cmds.showTooltip);
 
   await ctx.startServer();
-  await ctx.activateInlayHints();
   if (ctx.config.checkUpdate) {
     await ctx.checkUpdate();
   }
