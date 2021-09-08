@@ -34,12 +34,17 @@ export class InlayHintsController implements Disposable {
   }
 
   async activate() {
-    events.on('InsertLeave', async (bufnr) => {
-      const doc = workspace.getDocument(bufnr);
-      if (doc && isLuaDocument(doc.textDocument)) {
-        this.fetchAndRenderHints(doc);
-      }
-    });
+    events.on(
+      'InsertLeave',
+      async (bufnr) => {
+        const doc = workspace.getDocument(bufnr);
+        if (doc && isLuaDocument(doc.textDocument)) {
+          this.fetchAndRenderHints(doc);
+        }
+      },
+      null,
+      this.disposables
+    );
 
     workspace.onDidChangeTextDocument(
       (e) => {
