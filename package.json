@@ -79,6 +79,11 @@
             "`\"zh-cn\"` In Chinese"
           ]
         },
+        "sumneko-lua.logPath": {
+          "type": "string",
+          "default": "",
+          "description": "The log path"
+        },
         "sumneko-lua.enableNvimLuaDev": {
           "type": "boolean",
           "default": false,
