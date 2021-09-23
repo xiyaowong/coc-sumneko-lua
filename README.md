@@ -7,8 +7,13 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 ## Features
 
 - Supported features by the server
+
+  ![image](https://user-images.githubusercontent.com/47070852/133086083-a5357ca3-ada6-46d9-953f-f86026c137e4.png)
+
 - Nvim lua development(check setting `sumneko-lua.enableNvimLuaDev`). Credit: [folke/lua-dev.nvim](https://github.com/folke/lua-dev.nvim)
 - Inlay-hints(check settings `sumneko-lua.inlayHints.*`, `Lua.hint.*`)
+
+  ![nvim-lua-dev](https://user-images.githubusercontent.com/47070852/133085674-2310670d-6129-4aac-86ea-0e475bf09b25.gif)
 
 ## Install
 

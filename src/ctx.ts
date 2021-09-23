@@ -68,7 +68,12 @@ export class Ctx {
       return;
     }
 
-    return [bin, ['-E', path.join(serverDir, 'main.lua'), `--locale=${this.config.locale}`]];
+    const args: string[] = ['-E', path.join(serverDir, 'main.lua'), `--locale=${this.config.locale}`];
+    if (this.config.logPath.length > 0) {
+      args.push(`--logpath=${this.config.logPath}`);
+    }
+
+    return [bin, args];
   }
 
   async checkUpdate() {

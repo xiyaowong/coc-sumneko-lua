@@ -22,6 +22,10 @@ export class Config {
     return this.cfg.get<Locale>('locale');
   }
 
+  get logPath() {
+    return this.cfg.get<string>('logPath')!;
+  }
+
   get nvimLuaDev() {
     return this.cfg.get<boolean>('enableNvimLuaDev');
   }

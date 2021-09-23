@@ -15,6 +15,10 @@
 - type: `string`
 - default: `en-us`
 - description:    The localized language used
+## `sumneko-lua.logPath`
+- type: `string`
+- default: ``
+- description:    The log path
 ## `sumneko-lua.enableNvimLuaDev`
 - type: `boolean`
 - default: `false`
