@@ -23,6 +23,9 @@ async function main() {
   Object.keys(properties).forEach((k) => {
     config[k] = properties[k];
   });
+  Object.keys(overrids).forEach((key) => {
+    config[key] = { ...config[key], ...overrids[key] };
+  });
 
   // write package.json
   console.log('write package.json');
@@ -39,7 +42,7 @@ async function main() {
 - trigger completion in coc-settings
 `);
   Object.keys(config).forEach((key) => {
-    let v = { ...config[key], ...overrids[key] };
+    let v = config[key];
     settingsFileStream.write(
       `## \`${key}\`\n- type: \`${v.type}\`\n- default: \`${v.default}\`\n- description:    ${
         v.description ? v.description : v.markdownDescription

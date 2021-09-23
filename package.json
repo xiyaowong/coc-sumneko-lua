@@ -1100,7 +1100,7 @@
           "type": "integer"
         },
         "Lua.hint.enable": {
-          "default": false,
+          "default": true,
           "markdownDescription": "Enabel hint.",
           "scope": "resource",
           "type": "boolean"
