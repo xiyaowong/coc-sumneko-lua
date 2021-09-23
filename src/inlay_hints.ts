@@ -34,6 +34,11 @@ export class InlayHintsController implements Disposable {
   }
 
   async activate() {
+    // TODO: remove this way when the server which support $/requestHint has released
+    this.ctx.client.onNotification('$/hint', async (params) => {
+      await this.hintHandler(params);
+    });
+
     events.on(
       'InsertLeave',
       async (bufnr) => {
@@ -77,12 +82,36 @@ export class InlayHintsController implements Disposable {
     }
   }
 
+  private async hintHandler(params: { uri: string; edits: { range: Range; newText: string }[] }) {
+    const hints: InlayHint[] = [];
+    for (const edit of params.edits) {
+      hints.push({
+        kind: edit.newText.startsWith(':') ? HintKind.TypeHint : HintKind.ParamHint,
+        text: edit.newText,
+        pos: edit.range.start,
+      });
+    }
+    await this.renderHints(workspace.getDocument(params.uri), hints);
+  }
+
   private async fetchAndRenderHints(doc: Document) {
-    if (!this.inlayHintsEnabled) return;
-    if (doc && isLuaDocument(doc.textDocument)) {
-      this.fetchHints(doc).then(async (hints) => {
-        if (!hints) return;
-        this.renderHints(doc, hints);
+    if (!(this.inlayHintsEnabled && doc && isLuaDocument(doc.textDocument))) return;
+
+    try {
+      const hints = await this.fetchHints(doc);
+      if (hints) {
+        await this.renderHints(doc, hints);
+      }
+    } catch (e) {
+      const lastLineNumber = doc.lineCount - 1;
+      this.ctx.client.sendNotification('$/didChangeVisibleRanges', {
+        uri: doc.uri,
+        ranges: [
+          Range.create(
+            { line: 0, character: 0 },
+            { line: lastLineNumber, character: doc.getline(lastLineNumber).length }
+          ),
+        ],
       });
     }
   }
