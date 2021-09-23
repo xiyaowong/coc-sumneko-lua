@@ -11,6 +11,10 @@ const overrids = {
   'Lua.hint.enable': {
     default: true,
   },
+  'Lua.misc.parameters': {
+    default: [],
+    markdownDescription: 'Additional command line parameters when starting the language service.',
+  },
 };
 
 async function main() {

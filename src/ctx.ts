@@ -68,7 +68,9 @@ export class Ctx {
       return;
     }
 
-    const args: string[] = ['-E', path.join(serverDir, 'main.lua'), `--locale=${this.config.locale}`];
+    const args: string[] = ['-E', path.join(serverDir, 'main.lua'), `--locale=${this.config.locale}`].concat(
+      workspace.getConfiguration('Lua').get<string[]>('misc.parameters')!
+    );
     if (this.config.logPath.length > 0) {
       args.push(`--logpath=${this.config.logPath}`);
     }

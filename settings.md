@@ -165,8 +165,8 @@
 - description:    The maximum length of a hover to view the contents of a string.
 ## `Lua.misc.parameters`
 - type: `array`
-- default: `undefined`
-- description:    [Command line parameters](https://github.com/sumneko/lua-telemetry-server/tree/master/method) when starting the language service in VSCode.
+- default: ``
+- description:    Additional command line parameters when starting the language service.
 ## `Lua.runtime.builtin`
 - type: `object`
 - default: `undefined`
