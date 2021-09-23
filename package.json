@@ -94,6 +94,26 @@
           "default": true,
           "description": "Automatically check for updates after startup"
         },
+        "sumneko-lua.inlayHints.typeHintsPrefix": {
+          "type": "string",
+          "default": "« ",
+          "description": "Prefix for type hints"
+        },
+        "sumneko-lua.inlayHints.paramHintsPrefix": {
+          "type": "string",
+          "default": "» ",
+          "description": "Prefix for parameter hints"
+        },
+        "sumneko-lua.inlayHints.trimSemicolon": {
+          "type": "boolean",
+          "default": true,
+          "description": "Trim Semicolon"
+        },
+        "sumneko-lua.inlayHints.refreshOnInsertMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to refresh inlayHints on insert mode"
+        },
         "Lua.color.mode": {
           "default": "Semantic",
           "enum": [

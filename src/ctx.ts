@@ -17,6 +17,7 @@ import versionCompare from 'node-version-compare';
 import path from 'path';
 import { Config } from './config';
 import { downloadServer, getLatestRelease } from './downloader';
+import { InlayHintsController } from './inlay_hints';
 
 export type LuaDocument = TextDocument & { languageId: 'lua' };
 export function isLuaDocument(document: TextDocument): document is LuaDocument {
@@ -29,9 +30,13 @@ export type Cmd = (...args: any[]) => unknown;
 export class Ctx {
   client!: LanguageClient;
   public readonly config = new Config();
+  private inlayHintsController: InlayHintsController;
   barTooltip = '';
 
-  constructor(public readonly extCtx: ExtensionContext) {}
+  constructor(public readonly extCtx: ExtensionContext) {
+    this.inlayHintsController = new InlayHintsController(this);
+    this.extCtx.subscriptions.push(this.inlayHintsController);
+  }
 
   registerCommand(name: string, factory: (ctx: Ctx) => Cmd, internal = false) {
     const fullName = `sumneko-lua.${name}`;
@@ -184,6 +189,7 @@ export class Ctx {
     // activate components
     this.activateCommand();
     this.activateStatusBar();
+    await this.activateInlayHints();
   }
 
   activateStatusBar() {
@@ -240,5 +246,14 @@ export class Ctx {
         }
       }
     });
+  }
+
+  async activateInlayHints() {
+    await workspace.nvim.command('hi default link CocLuaTypeHint  CocCodeLens');
+    await workspace.nvim.command('hi default link CocLuaParamHint CocCodeLens');
+
+    if (this.config.inlayHints) {
+      this.inlayHintsController.activate();
+    }
   }
 }
