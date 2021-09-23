@@ -7,6 +7,12 @@ const fetch = require('node-fetch');
 const packageJson = require('./package.json');
 const config = require('./coc-sumneko-lua.json');
 
+const overrids = {
+  'Lua.hint.enable': {
+    default: true,
+  },
+};
+
 async function main() {
   let resp = await fetch('https://cdn.jsdelivr.net/gh/sumneko/vscode-lua@master/setting/schema.json');
   let schema = await resp.json();
@@ -33,7 +39,7 @@ async function main() {
 - trigger completion in coc-settings
 `);
   Object.keys(config).forEach((key) => {
-    let v = config[key];
+    let v = { ...config[key], ...overrids[key] };
     settingsFileStream.write(
       `## \`${key}\`\n- type: \`${v.type}\`\n- default: \`${v.default}\`\n- description:    ${
         v.description ? v.description : v.markdownDescription

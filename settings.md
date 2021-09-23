@@ -125,7 +125,7 @@
 - description:    Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.
 ## `Lua.hint.enable`
 - type: `boolean`
-- default: `false`
+- default: `true`
 - description:    Enabel hint.
 ## `Lua.hint.paramName`
 - type: `string`
