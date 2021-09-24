@@ -127,18 +127,17 @@ export class Ctx {
     }
   }
 
-  async startServer() {
+  createClient(): undefined | LanguageClient {
     const bin = this.resolveBin();
-    if (!bin) {
-      return;
-    }
+    if (!bin) return;
 
     const [command, args] = bin;
 
     const serverOptions: ServerOptions = { command, args };
 
     const clientOptions: LanguageClientOptions = {
-      documentSelector: [{ language: 'lua' }],
+      documentSelector: [{ scheme: 'file', language: 'lua' }],
+      progressOnInitialization: true,
       initializationOptions: {
         changeConfiguration: true,
       },
@@ -183,8 +182,12 @@ export class Ctx {
         },
       },
     };
+    return new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
+  }
 
-    const client = new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
+  async startServer() {
+    const client = this.createClient();
+    if (!client) return;
     this.extCtx.subscriptions.push(services.registLanguageClient(client));
     await client.onReady();
     this.client = client;
