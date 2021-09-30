@@ -14,7 +14,7 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 
   ![nvim-lua-dev](https://user-images.githubusercontent.com/47070852/133085674-2310670d-6129-4aac-86ea-0e475bf09b25.gif)
 
-- Inlay-hints(check settings `sumneko-lua.inlayHints.*`, `Lua.hint.*`)
+- Inlay-hints(check settings `sumneko-lua.inlayHints.*`, `Lua.hint.*`). Highlights: `CocLuaTypeHint`, `CocLuaParamHint`
 
   ![inlay-hint](https://user-images.githubusercontent.com/47070852/134477208-c51a0f52-5fa1-41bf-a999-1fbecb0afb9c.png)
 
