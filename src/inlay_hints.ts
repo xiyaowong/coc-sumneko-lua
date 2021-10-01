@@ -82,13 +82,17 @@ export class InlayHintsController implements Disposable {
     }
   }
 
-  private async hintHandler(params: { uri: string; edits: { range: Range; newText: string }[] }) {
+  private async hintHandler(params: {
+    uri: string;
+    edits: { range: Range; pos: Position; newText: string; text: string }[];
+  }) {
+    // pos and text are new in version2.4.0
     const hints: InlayHint[] = [];
     for (const edit of params.edits) {
       hints.push({
-        kind: edit.newText.startsWith(':') ? HintKind.TypeHint : HintKind.ParamHint,
-        text: edit.newText,
-        pos: edit.range.start,
+        kind: (edit.text ? edit.text : edit.newText).startsWith(':') ? HintKind.TypeHint : HintKind.ParamHint,
+        text: edit.text ? edit.text : edit.newText,
+        pos: edit.pos ? edit.pos : edit.range.start,
       });
     }
     await this.renderHints(workspace.getDocument(params.uri), hints);
