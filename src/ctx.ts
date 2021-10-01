@@ -58,7 +58,6 @@ export class Ctx {
       platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'macOS' : 'Linux',
       platform === 'win32' ? 'lua-language-server.exe' : 'lua-language-server'
     );
-    console.log(bin);
     if (!fs.existsSync(bin)) {
       return;
     }
