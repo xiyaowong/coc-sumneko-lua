@@ -57,7 +57,7 @@
 - description:    Shows function call snippets.
 ## `Lua.completion.displayContext`
 - type: `integer`
-- default: `6`
+- default: `0`
 - description:    Previewing the relevant code snippet of the suggestion may help you understand the usage of the suggestion. The number set indicates the number of intercepted lines in the code fragment. If it is set to `0`, this feature can be disabled.
 ## `Lua.completion.enable`
 - type: `boolean`
@@ -99,11 +99,11 @@
 
 ## `Lua.diagnostics.ignoredFiles`
 - type: `string`
-- default: `Disable`
+- default: `Opened`
 - description:    How to diagnose ignored files.
 ## `Lua.diagnostics.libraryFiles`
 - type: `string`
-- default: `Disable`
+- default: `Opened`
 - description:    How to diagnose files loaded via `Lua.workspace.library`.
 ## `Lua.diagnostics.neededFileStatus`
 - type: `object`
