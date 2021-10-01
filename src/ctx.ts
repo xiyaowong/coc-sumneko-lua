@@ -230,6 +230,7 @@ export class Ctx {
       if (params.command != 'lua.config') {
         return;
       }
+      const propMap: Map<string, Map<string, any>> = new Map();
       for (const data of params.data) {
         const config = workspace.getConfiguration(undefined, data.uri);
         if (data.action == 'add') {
@@ -243,9 +244,11 @@ export class Ctx {
           continue;
         }
         if (data.action == 'prop') {
-          const value: { [key: string]: any } = config.get(data.key, {});
-          value[data.prop] = data.value;
-          config.update(data.key, value, data.global);
+          if (!propMap[data.key]) {
+            propMap[data.key] = config.get(data.key);
+          }
+          propMap[data.key][data.prop] = data.value;
+          config.update(data.key, propMap[data.key], data.global);
           continue;
         }
       }
