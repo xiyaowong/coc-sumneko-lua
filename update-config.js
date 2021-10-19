@@ -25,7 +25,9 @@ async function main() {
   // merge config
   console.log('merge config');
   Object.keys(properties).forEach((k) => {
-    config[k] = properties[k];
+    if (k.includes('.') || !properties[k]['properties']) {
+      config[`Lua.${k}`] = properties[k];
+    }
   });
   Object.keys(overrids).forEach((key) => {
     config[key] = { ...config[key], ...overrids[key] };
