@@ -52,12 +52,7 @@ export class Ctx {
   resolveBin(): [string, string[]] | undefined {
     const platform = process.platform;
     const serverDir = path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'server');
-    const bin = path.join(
-      serverDir,
-      'bin',
-      platform === 'win32' ? 'Windows' : platform === 'darwin' ? 'macOS' : 'Linux',
-      platform === 'win32' ? 'lua-language-server.exe' : 'lua-language-server'
-    );
+    const bin = path.join(serverDir, 'bin', platform === 'win32' ? 'lua-language-server.exe' : 'lua-language-server');
     if (!fs.existsSync(bin)) {
       return;
     }
@@ -67,7 +62,7 @@ export class Ctx {
       return;
     }
 
-    const args: string[] = ['-E', path.join(serverDir, 'main.lua'), `--locale=${this.config.locale}`].concat(
+    const args: string[] = ['-E', path.join(serverDir, 'bin', 'main.lua'), `--locale=${this.config.locale}`].concat(
       workspace.getConfiguration('Lua').get<string[]>('misc.parameters')!
     );
     if (this.config.logPath.length > 0) {

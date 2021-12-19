@@ -3,6 +3,7 @@ import extract from 'extract-zip';
 import fetch, { Response } from 'node-fetch';
 import path from 'path';
 import * as fs from 'fs-extra';
+import * as os from 'os';
 
 const ls_name = 'sumneko-lua-ls';
 
@@ -49,14 +50,15 @@ export async function getLatestRelease(): Promise<Release | undefined> {
     return;
   }
 
+  const targetPlatform = `${os.platform()}-${os.arch()}`;
+
   const release = await response.json();
 
-  // TODO: validate data
   const extension = release.results[0].extensions[0].versions[0];
 
   return {
     version: extension.version,
-    url: `${extension.assetUri}/Microsoft.VisualStudio.Services.VSIXPackage`,
+    url: `${extension.assetUri}/Microsoft.VisualStudio.Services.VSIXPackage?redirect=true&targetPlatform=${targetPlatform}&install=true`,
   };
 }
 
@@ -76,10 +78,14 @@ export async function downloadServer(context: ExtensionContext, release?: Releas
 
   statusItem.text = 'Downloading latest sumneko lua-language-server';
 
-  const resp = await fetch(release.url, { headers: { 'user-agent': 'VSCode' } });
+  const resp = await fetch(release.url, {
+    headers: {
+      'user-agent': 'Mozilla/5.0',
+    },
+  });
   if (!resp.ok) {
     statusItem.hide();
-    throw new Error('Request failed');
+    throw new Error('Download failed! Maybe the provided target platform is not supported for now');
   }
 
   const targetPath = path.join(context.storagePath, ls_name);
@@ -94,8 +100,11 @@ export async function downloadServer(context: ExtensionContext, release?: Releas
 
   statusItem.text = `Extracting to ${targetPath}`;
   await extract(extTempFile, { dir: targetPath });
-  await fs.chmod(path.join(targetPath, 'extension', 'server', 'bin', 'Linux', 'lua-language-server'), '777');
-  await fs.chmod(path.join(targetPath, 'extension', 'server', 'bin', 'macOS', 'lua-language-server'), '777');
+
+  const binPath = path.join(targetPath, 'extension', 'server', 'bin', 'lua-language-server');
+  if (fs.existsSync(binPath)) {
+    await fs.chmod(binPath, '777');
+  }
 
   statusItem.text = `Removing temp file ${extTempFile}`;
   await fs.remove(tempDir);
