@@ -1,6 +1,6 @@
 {
   "name": "coc-sumneko-lua",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Lua extension using sumneko lua-language-server for coc.nvim",
   "author": "wongxy <xiyao.wong@foxmail.com>",
   "license": "MIT",
