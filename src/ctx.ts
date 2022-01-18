@@ -39,7 +39,7 @@ export class Ctx {
   }
 
   registerCommand(name: string, factory: (ctx: Ctx) => Cmd, internal = false) {
-    const fullName = `sumneko-lua.${name}`;
+    const fullName = `sumneko_lua.${name}`;
     const cmd = factory(this);
     const d = commands.registerCommand(fullName, cmd, null, internal);
     this.extCtx.subscriptions.push(d);
@@ -176,7 +176,7 @@ export class Ctx {
         },
       },
     };
-    return new LanguageClient('sumneko-lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
+    return new LanguageClient('sumneko_lua', 'Sumneko Lua Language Server', serverOptions, clientOptions);
   }
 
   async startServer() {
