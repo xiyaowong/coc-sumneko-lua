@@ -80,7 +80,7 @@ export async function downloadServer(context: ExtensionContext, release?: Releas
 
   const resp = await fetch(release.url, {
     headers: {
-      'user-agent': 'Mozilla/5.0',
+      'user-agent': 'VSCode',
     },
   });
   if (!resp.ok) {
@@ -88,12 +88,14 @@ export async function downloadServer(context: ExtensionContext, release?: Releas
     throw new Error('Download failed! Maybe the provided target platform is not supported for now');
   }
 
+  const buffer = await resp.buffer();
+
   const targetPath = path.join(context.storagePath, ls_name);
   const tempDir = await fs.mkdtemp(ls_name);
   const extTempFile = path.join(tempDir, ls_name);
 
   statusItem.text = `Writing temp file ${extTempFile}`;
-  await fs.writeFile(extTempFile, await resp.buffer());
+  await fs.writeFile(extTempFile, buffer);
 
   statusItem.text = `Removing old files`;
   await fs.remove(targetPath);
