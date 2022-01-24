@@ -43,10 +43,22 @@
 - type: `boolean`
 - default: `false`
 - description:    Whether to refresh inlayHints on insert mode
-## `Lua.color.mode`
-- type: `string`
-- default: `Semantic`
-- description:    Color mode.
+## `Lua.IntelliSense.traceBeSetted`
+- type: `boolean`
+- default: `false`
+- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
+## `Lua.IntelliSense.traceFieldInject`
+- type: `boolean`
+- default: `false`
+- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
+## `Lua.IntelliSense.traceLocalSet`
+- type: `boolean`
+- default: `false`
+- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
+## `Lua.IntelliSense.traceReturn`
+- type: `boolean`
+- default: `false`
+- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
 ## `Lua.completion.autoRequire`
 - type: `boolean`
 - default: `true`
@@ -67,6 +79,10 @@
 - type: `string`
 - default: `Replace`
 - description:    Shows keyword syntax snippets.
+## `Lua.completion.postfix`
+- type: `string`
+- default: `@`
+- description:    The symbol used to trigger the postfix suggestion.
 ## `Lua.completion.requireSeparator`
 - type: `string`
 - default: `.`
@@ -87,7 +103,6 @@
 - type: `array`
 - default: `undefined`
 - description:    Disabled diagnostic (Use code in hover brackets).
-
 ## `Lua.diagnostics.enable`
 - type: `boolean`
 - default: `true`
@@ -96,7 +111,6 @@
 - type: `array`
 - default: `undefined`
 - description:    Defined global variables.
-
 ## `Lua.diagnostics.ignoredFiles`
 - type: `string`
 - default: `Opened`
@@ -108,13 +122,14 @@
 ## `Lua.diagnostics.neededFileStatus`
 - type: `object`
 - default: `undefined`
-- description:    If you want to check only opened files, choice Opened; else choice Any.
+- description:    * Opened:  only diagnose opened files
+* Any:     diagnose all files
+* Disable: disable this diagnostic
 
 ## `Lua.diagnostics.severity`
 - type: `object`
 - default: `undefined`
 - description:    Modified diagnostic severity.
-
 ## `Lua.diagnostics.workspaceDelay`
 - type: `integer`
 - default: `0`
@@ -123,10 +138,14 @@
 - type: `integer`
 - default: `100`
 - description:    Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.
+## `Lua.hint.arrayIndex`
+- type: `string`
+- default: `Auto`
+- description:    Show hints of array index when constructing a table.
 ## `Lua.hint.enable`
 - type: `boolean`
 - default: `true`
-- description:    Enabel hint.
+- description:    Enable inlay hint.
 ## `Lua.hint.paramName`
 - type: `string`
 - default: `All`
@@ -188,9 +207,14 @@
 - type: `array`
 - default: `?.lua,?/init.lua`
 - description:    When using `require`, how to find the file based on the input name.
-Setting this config to `?/init.lua` means that when you enter `require 'myfile'`, all `**/myfile/init.lua` will be searched from the loaded files.
+Setting this config to `?/init.lua` means that when you enter `require 'myfile'`, `${workspace}/myfile/init.lua` will be searched from the loaded files.
+if `runtime.pathStrict` is `false`, `${workspace}/**/myfile/init.lua` will also be searched.
 If you want to load files outside the workspace, you need to set `Lua.workspace.library` first.
 
+## `Lua.runtime.pathStrict`
+- type: `boolean`
+- default: `false`
+- description:    When enabled, `runtime.path` will only search the first level of directories, see the description of `runtime.path`.
 ## `Lua.runtime.plugin`
 - type: `string`
 - default: ``
@@ -214,6 +238,22 @@ The following example shows that 'include' is treated as' require '.
 - type: `string`
 - default: `Lua 5.4`
 - description:    Lua runtime version.
+## `Lua.semantic.annotation`
+- type: `boolean`
+- default: `true`
+- description:    Semantic coloring of type annotations.
+## `Lua.semantic.enable`
+- type: `boolean`
+- default: `true`
+- description:    Enable semantic color. You may need to set `editor.semanticHighlighting.enabled` to `true` to take effect.
+## `Lua.semantic.keyword`
+- type: `boolean`
+- default: `false`
+- description:    Semantic coloring of keywords/literals/operators. You only need to enable this feature if your editor cannot do syntax coloring.
+## `Lua.semantic.variable`
+- type: `boolean`
+- default: `true`
+- description:    Semantic coloring of variables/fields/parameters.
 ## `Lua.signatureHelp.enable`
 - type: `boolean`
 - default: `true`
@@ -239,13 +279,14 @@ The following example shows that 'include' is treated as' require '.
 * OpenResty
 * Cocos4.0
 * LÖVE
+* LÖVR
+* skynet
 * Jass
 
 ## `Lua.workspace.ignoreDir`
 - type: `array`
 - default: `.vscode`
 - description:    Ignored files and directories (Use `.gitignore` grammar).
-
 ## `Lua.workspace.ignoreSubmodules`
 - type: `boolean`
 - default: `true`
@@ -253,7 +294,7 @@ The following example shows that 'include' is treated as' require '.
 ## `Lua.workspace.library`
 - type: `array`
 - default: `undefined`
-- description:    In addition to the current workspace, which directories will load files from.
+- description:    In addition to the current workspace, which directories will load files from. The files in these directories will be treated as externally provided code libraries, and some features (such as renaming fields) will not modify these files.
 ## `Lua.workspace.maxPreload`
 - type: `integer`
 - default: `1000`
