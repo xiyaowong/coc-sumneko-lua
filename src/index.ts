@@ -19,11 +19,16 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const bin = ctx.resolveBin();
   if (!bin) {
-    let ret = 0;
+    let ret = 'Yes';
     if (ctx.config.prompt) {
-      ret = await window.showQuickpick(['Yes', 'Cancel'], 'Sumneko lua language server is not found, install now?');
+      ret =
+        (await window.showInformationMessage(
+          'Sumneko lua language server is not found, install now?',
+          'Yes',
+          'Cancel'
+        )) || 'Yes';
     }
-    if (ret === 0) {
+    if (ret == 'Yes') {
       try {
         await downloadServer(context);
       } catch (e) {
