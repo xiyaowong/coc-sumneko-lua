@@ -132,7 +132,7 @@
 - description:    Modified diagnostic severity.
 ## `Lua.diagnostics.workspaceDelay`
 - type: `integer`
-- default: `0`
+- default: `3000`
 - description:    Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics.
 ## `Lua.diagnostics.workspaceRate`
 - type: `integer`
@@ -297,11 +297,11 @@ The following example shows that 'include' is treated as' require '.
 - description:    In addition to the current workspace, which directories will load files from. The files in these directories will be treated as externally provided code libraries, and some features (such as renaming fields) will not modify these files.
 ## `Lua.workspace.maxPreload`
 - type: `integer`
-- default: `1000`
+- default: `5000`
 - description:    Max preloaded files.
 ## `Lua.workspace.preloadFileSize`
 - type: `integer`
-- default: `100`
+- default: `500`
 - description:    Skip files larger than this value (KB) when preloading.
 ## `Lua.workspace.useGitIgnore`
 - type: `boolean`

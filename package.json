@@ -71,12 +71,14 @@
           "default": "en-us",
           "enum": [
             "en-us",
-            "zh-cn"
+            "zh-cn",
+            "pt-br"
           ],
           "description": "The localized language used",
           "enumDescriptions": [
-            "`\"en-us\"` In English",
-            "`\"zh-cn\"` In Chinese"
+            "`\"en-us\"` English",
+            "`\"zh-cn\"` 简体中文",
+            "`\"pt-br\"` Português"
           ]
         },
         "sumneko-lua.logPath": {
@@ -1141,7 +1143,7 @@
           "type": "object"
         },
         "Lua.diagnostics.workspaceDelay": {
-          "default": 0,
+          "default": 3000,
           "markdownDescription": "Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics.",
           "scope": "resource",
           "type": "integer"
@@ -1588,13 +1590,13 @@
           "type": "array"
         },
         "Lua.workspace.maxPreload": {
-          "default": 1000,
+          "default": 5000,
           "markdownDescription": "Max preloaded files.",
           "scope": "resource",
           "type": "integer"
         },
         "Lua.workspace.preloadFileSize": {
-          "default": 100,
+          "default": 500,
           "markdownDescription": "Skip files larger than this value (KB) when preloading.",
           "scope": "resource",
           "type": "integer"

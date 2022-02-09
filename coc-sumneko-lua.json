@@ -12,9 +12,9 @@
   "sumneko-lua.locale": {
     "type": "string",
     "default": "en-us",
-    "enum": ["en-us", "zh-cn"],
+    "enum": ["en-us", "zh-cn", "pt-br"],
     "description": "The localized language used",
-    "enumDescriptions": ["`\"en-us\"` In English", "`\"zh-cn\"` In Chinese"]
+    "enumDescriptions": ["`\"en-us\"` English", "`\"zh-cn\"` 简体中文", "`\"pt-br\"` Português"]
   },
   "sumneko-lua.logPath": {
     "type": "string",
@@ -52,4 +52,3 @@
     "description": "Whether to refresh inlayHints on insert mode"
   }
 }
-
