@@ -200,11 +200,11 @@ export class Ctx {
 
     this.client.onNotification('$/status/show', () => {
       keepHide = false;
-      bar.show;
+      bar.show();
     });
     this.client.onNotification('$/status/hide', () => {
       keepHide = true;
-      bar.hide;
+      bar.hide();
     });
     this.client.onNotification('$/status/report', (params) => {
       const text: string = params.text;
