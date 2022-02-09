@@ -196,8 +196,16 @@ export class Ctx {
     const bar = window.createStatusBarItem();
     this.extCtx.subscriptions.push(bar);
 
-    this.client.onNotification('$/status/show', bar.show);
-    this.client.onNotification('$/status/hide', bar.hide);
+    let keepHide = false;
+
+    this.client.onNotification('$/status/show', () => {
+      keepHide = false;
+      bar.show;
+    });
+    this.client.onNotification('$/status/hide', () => {
+      keepHide = true;
+      bar.hide;
+    });
     this.client.onNotification('$/status/report', (params) => {
       const text: string = params.text;
       bar.isProgress = text.includes('$(loading~spin)');
@@ -210,7 +218,7 @@ export class Ctx {
       async () => {
         const doc = await workspace.document;
         if (isLuaDocument(doc.textDocument)) {
-          bar.show();
+          if (!keepHide) bar.show();
         } else {
           bar.hide();
         }
