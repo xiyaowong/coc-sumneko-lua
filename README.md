@@ -16,8 +16,7 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 
 - Inlay-hints(check settings `sumneko-lua.inlayHints.*`, `Lua.hint.*`). Highlights: `CocLuaTypeHint`, `CocLuaParamHint`
 
-  ![inlay-hint](https://user-images.githubusercontent.com/47070852/134477208-c51a0f52-5fa1-41bf-a999-1fbecb0afb9c.png)
-
+  ![inlay-hint](https://user-images.githubusercontent.com/47070852/154476119-ce01b090-6ae4-42dd-887a-52d14fd5d037.png)
 ## Install
 
 `:CocInstall coc-sumneko-lua`
