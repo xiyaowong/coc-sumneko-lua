@@ -11,7 +11,7 @@ function vim.treesitter.LanguageTree:add_child(lang) end
 -- Returns a map of language to child tree.
 function vim.treesitter.LanguageTree:children() end
 
--- Determines wether This goes down the tree to recursively check childs.
+-- Determines whether {range} is contained in this language tree
 --- @param range any #A range, that is a `{ start_line, start_col,
 ---              end_line, end_col }` table.
 function vim.treesitter.LanguageTree:contains(range) end
@@ -40,13 +40,14 @@ function vim.treesitter.LanguageTree:included_regions() end
 -- Invalidates this parser and all its children
 function vim.treesitter.LanguageTree:invalidate(reload) end
 
--- Determines whether this tree is valid. If the tree is invalid, `parse()` must be called to get the an updated tree.
+-- Determines whether this tree is valid. If the tree is invalid,
+-- call `parse()` . This will return the updated tree.
 function vim.treesitter.LanguageTree:is_valid() end
 
 -- Gets the language of this tree node.
 function vim.treesitter.LanguageTree:lang() end
 
--- Gets the appropriate language that contains
+-- Gets the appropriate language that contains {range}
 --- @param range any #A text range, see |LanguageTree:contains|
 function vim.treesitter.LanguageTree:language_for_range(range) end
 
@@ -56,11 +57,20 @@ function vim.treesitter.LanguageTree:language_for_range(range) end
 -- should be created.
 function vim.treesitter.LanguageTree:parse() end
 
--- Registers callbacks for the parser
---- @param cbs any #An `nvim_buf_attach` -like table argument with the following keys : `on_bytes` : see `nvim_buf_attach` , but this will be called after the parsers callback. `on_changedtree` : a callback that will be called every time the
----             tree has syntactical changes. it will only be
----             passed one argument, that is a table of the ranges
----             (as node ranges) that changed. `on_child_added` : emitted when a child is added to the tree. `on_child_removed` : emitted when a child is removed from the tree.
+-- Registers callbacks for the parser.
+--- @param cbs any #table An |nvim_buf_attach()|-like table argument
+---             with the following keys :
+---             • `on_bytes` : see |nvim_buf_attach()|, but this will be
+---               called after the parsers callback.
+---             • `on_changedtree` : a callback that will be
+---               called every time the tree has syntactical
+---               changes. It will only be passed one argument,
+---               which is a table of the ranges (as node ranges)
+---               that changed.
+---             • `on_child_added` : emitted when a child is added
+---               to the tree.
+---             • `on_child_removed` : emitted when a child is
+---               removed from the tree.
 function vim.treesitter.LanguageTree:register_cbs(cbs) end
 
 -- Removes a child language from this tree.
@@ -87,8 +97,7 @@ vim.treesitter.Query = {}
 
 -- Iterate over all captures from all matches inside {node}
 --- @param node any #The node under which the search will occur
---- @param source any #The source buffer or string to exctract text
----               from
+--- @param source any #The source buffer or string to extract text from
 --- @param start any #The starting line of the search
 --- @param stop any #The stopping line of the search (end-exclusive)
 --- @return any #The matching capture id
@@ -113,13 +122,6 @@ function vim.treesitter.TSHighlighter:destroy() end
 -- Gets the query used for
 --- @param lang any #A language used by the highlighter.
 function vim.treesitter.TSHighlighter:get_query(lang) end
-
--- Performs a healthcheck for treesitter integration.
-function vim.treesitter.check_health() end
-
--- Lists the parsers currently installed
---- @return any #A list of parsers
-function vim.treesitter.list_parsers() end
 
 -- Represents a single treesitter parser for a language. The
 -- language can contain child languages with in its range, hence
