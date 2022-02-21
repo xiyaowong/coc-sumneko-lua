@@ -61,6 +61,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     };
   });
   ctx.registerCommand('showTooltip', cmds.showTooltip);
+  ctx.registerCommand('insertNvimLuaPluginLibrary', cmds.insertNvimLuaPluginLibrary);
 
   await ctx.startServer();
   if (ctx.config.checkUpdate) {

@@ -1,8 +1,8 @@
-import { window } from 'coc.nvim';
+import { window, workspace } from 'coc.nvim';
 import path from 'path';
 import { Cmd, Ctx } from './ctx';
 import { downloadServer } from './downloader';
-import { readJson } from 'fs-extra';
+import { readJson, existsSync } from 'fs-extra';
 
 export function install(ctx: Ctx): Cmd {
   return async () => {
@@ -27,5 +27,37 @@ export function version(ctx: Ctx): Cmd {
 export function showTooltip(ctx: Ctx): Cmd {
   return async () => {
     window.showNotification({ content: ctx.barTooltip, timeout: 5000 });
+  };
+}
+
+export function insertNvimLuaPluginLibrary(_: Ctx): Cmd {
+  return async () => {
+    const config = workspace.getConfiguration('Lua.workspace');
+    const library = Array.from(config.get<string[]>('library')!);
+
+    const runtimepath = (await workspace.nvim.getOption('runtimepath')) as string;
+    const paths = runtimepath
+      .split(',')
+      .map((v) => {
+        return path.join(v, 'lua');
+      })
+      .filter((v) => !library.includes(v) && existsSync(v));
+
+    if (!paths.length) return;
+
+    const vimruntime = (await workspace.nvim.call('expand', ['$VIMRUNTIME/lua'])) as string;
+    const myvimrc = path.join(path.dirname(await workspace.nvim.call('expand', ['$MYVIMRC'])), 'lua');
+
+    const idx = await window.showQuickpick(
+      paths.map((v) => {
+        if (v == vimruntime) return `${vimruntime} (auto added if sumneko-lua.enableNvimLuaDev is true )`;
+        if (v == myvimrc) return `${myvimrc} (not recommended)`;
+        return path.basename(path.dirname(v));
+      })
+    );
+    if (idx != -1) {
+      library.push(paths[idx]);
+      config.update('library', library);
+    }
   };
 }

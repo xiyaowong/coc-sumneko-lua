@@ -1658,6 +1658,11 @@
         "command": "sumneko-lua.showTooltip",
         "title": "Show tooltips",
         "category": "Sumneko lua-language-server"
+      },
+      {
+        "command": "sumneko-lua.insertNvimLuaPluginLibrary",
+        "title": "Insert nvim lua plugin to current workspace library",
+        "category": "Sumneko lua-language-server"
       }
     ]
   }

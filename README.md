@@ -17,6 +17,7 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 - Inlay-hints(check settings `sumneko-lua.inlayHints.*`, `Lua.hint.*`). Highlights: `CocLuaTypeHint`, `CocLuaParamHint`
 
   ![inlay-hint](https://user-images.githubusercontent.com/47070852/154476119-ce01b090-6ae4-42dd-887a-52d14fd5d037.png)
+
 ## Install
 
 `:CocInstall coc-sumneko-lua`
@@ -25,12 +26,13 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 
 ## Commands
 
-| Command                   | Description                                   |
-| ------------------------- | --------------------------------------------- |
-| `sumneko-lua.install`     | Install or update sumneko lua-language-server |
-| `sumneko-lua.restart`     | Restart server                                |
-| `sumneko-lua.version`     | Echo server version                           |
-| `sumneko-lua.showTooltip` | Show tooltips                                 |
+| Command                                  | Description                                         |
+| ---------------------------------------- | --------------------------------------------------- |
+| `sumneko-lua.install`                    | Install or update sumneko lua-language-server       |
+| `sumneko-lua.restart`                    | Restart server                                      |
+| `sumneko-lua.version`                    | Echo server version                                 |
+| `sumneko-lua.showTooltip`                | Show tooltips                                       |
+| `sumneko-lua.insertNvimLuaPluginLibrary` | Insert nvim lua plugin to current workspace library |
 
 ## Credit
 
