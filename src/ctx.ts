@@ -130,7 +130,7 @@ export class Ctx {
     const serverOptions: ServerOptions = { command, args };
 
     const clientOptions: LanguageClientOptions = {
-      documentSelector: [{ scheme: 'file', language: 'lua' }],
+      documentSelector: [{ language: 'lua' }],
       progressOnInitialization: true,
       initializationOptions: {
         changeConfiguration: true,
