@@ -73,6 +73,7 @@ export class Ctx {
   }
 
   async checkUpdate() {
+    console.log('Check update');
     const latest = await getLatestRelease();
     if (!latest) {
       return;

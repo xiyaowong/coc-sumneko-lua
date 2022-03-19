@@ -1655,6 +1655,11 @@
         "category": "Sumneko lua-language-server"
       },
       {
+        "command": "sumneko-lua.checkUpdate",
+        "title": "Check update",
+        "category": "Sumneko lua-language-server"
+      },
+      {
         "command": "sumneko-lua.showTooltip",
         "title": "Show tooltips",
         "category": "Sumneko lua-language-server"

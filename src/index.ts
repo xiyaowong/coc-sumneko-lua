@@ -1,5 +1,6 @@
 import { ExtensionContext, window } from 'coc.nvim';
-import { existsSync, mkdirSync } from 'fs';
+import { writeFile, existsSync, mkdirSync, readFile } from 'fs-extra';
+import path from 'path';
 import * as cmds from './commands';
 import { Ctx } from './ctx';
 import { downloadServer } from './downloader';
@@ -62,9 +63,19 @@ export async function activate(context: ExtensionContext): Promise<void> {
   });
   ctx.registerCommand('showTooltip', cmds.showTooltip);
   ctx.registerCommand('insertNvimLuaPluginLibrary', cmds.insertNvimLuaPluginLibrary);
+  ctx.registerCommand('checkUpdate', () => async () => await ctx.checkUpdate());
 
   await ctx.startServer();
   if (ctx.config.checkUpdate) {
-    await ctx.checkUpdate();
+    const dataPath = path.join(context.storagePath, 'checkUpdate');
+    let lastCheck = 0;
+    if (existsSync(dataPath)) {
+      lastCheck = Number((await readFile(dataPath)).toString());
+    }
+    const now = Date.now();
+    if (now - lastCheck > 4 * 60 * 60 * 1000) {
+      await ctx.checkUpdate();
+      await writeFile(dataPath, now.toString());
+    }
   }
 }

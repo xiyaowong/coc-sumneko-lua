@@ -29,7 +29,7 @@
   "sumneko-lua.checkUpdate": {
     "type": "boolean",
     "default": true,
-    "description": "Automatically check for updates after startup"
+    "description": "Automatically check for updates after startup(Only one check within 4 hours)"
   },
   "sumneko-lua.inlayHints.typeHintsPrefix": {
     "type": "string",
