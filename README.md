@@ -31,6 +31,7 @@ This extension uses server binaries extracted from [`sumneko/vscode-lua`](https:
 | `sumneko-lua.install`                    | Install or update sumneko lua-language-server       |
 | `sumneko-lua.restart`                    | Restart server                                      |
 | `sumneko-lua.version`                    | Echo server version                                 |
+| `sumneko-lua.checkUpdate`                | Check update                                        |
 | `sumneko-lua.showTooltip`                | Show tooltips                                       |
 | `sumneko-lua.insertNvimLuaPluginLibrary` | Insert nvim lua plugin to current workspace library |
 
