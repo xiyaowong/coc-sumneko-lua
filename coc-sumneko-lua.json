@@ -31,6 +31,11 @@
     "default": true,
     "description": "Automatically check for updates after startup(Only one check within 4 hours)"
   },
+  "sumneko-lua.serverDir": {
+    "type": "string",
+    "default": null,
+    "description": "The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default"
+  },
   "sumneko-lua.inlayHints.typeHintsPrefix": {
     "type": "string",
     "default": "« ",

@@ -2,7 +2,7 @@ import { window, workspace } from 'coc.nvim';
 import path from 'path';
 import { Cmd, Ctx } from './ctx';
 import { downloadServer } from './downloader';
-import { readJson, existsSync } from 'fs-extra';
+import { existsSync } from 'fs-extra';
 
 export function install(ctx: Ctx): Cmd {
   return async () => {
@@ -18,9 +18,8 @@ export function install(ctx: Ctx): Cmd {
 
 export function version(ctx: Ctx): Cmd {
   return async () => {
-    const packageJson = path.join(ctx.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'package.json');
-    const packageData = await readJson(packageJson);
-    window.showMessage(packageData.version);
+    const v = (await ctx.getCurrentVersion()) || 'unknown version';
+    window.showMessage(v);
   };
 }
 

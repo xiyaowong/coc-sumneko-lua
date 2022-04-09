@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import {
   commands,
   Disposable,
@@ -50,8 +51,11 @@ export class Ctx {
   }
 
   resolveBin(): [string, string[]] | undefined {
+    const serverDir = this.config.serverDir
+      ? this.config.serverDir
+      : path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'server');
+
     const platform = process.platform;
-    const serverDir = path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'server');
     const bin = path.join(serverDir, 'bin', platform === 'win32' ? 'lua-language-server.exe' : 'lua-language-server');
     if (!fs.existsSync(bin)) {
       return;
@@ -72,33 +76,52 @@ export class Ctx {
     return [bin, args];
   }
 
+  async getCurrentVersion(): Promise<string | undefined> {
+    if (this.config.serverDir) {
+      const bin = this.resolveBin();
+      if (!bin) return;
+      const [cmd, args] = bin;
+      args.push('--version');
+      try {
+        return String(execSync(`${cmd} ${args.join(' ')}`)).trim();
+      } catch (err) {
+        console.log(err);
+        return;
+      }
+    } else {
+      // must be based on the version of vscode extension
+      try {
+        const packageJson = path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'package.json');
+        const packageData = await fs.readJson(packageJson);
+        return packageData.version;
+      } catch (err) {
+        console.error(err);
+        return;
+      }
+    }
+  }
+
   async checkUpdate() {
-    console.log('Check update');
+    // no need
+    if (this.config.serverDir) return;
+
+    const currentVersion = await this.getCurrentVersion();
+    if (!currentVersion) return;
+
     const latest = await getLatestRelease();
     if (!latest) {
       return;
     }
-
-    let old = '';
-    try {
-      const packageJson = path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'package.json');
-      const packageData = await fs.readJson(packageJson);
-      old = packageData.version;
-    } catch (err) {
-      console.error(err);
+    const latestVersion = latest.version.match(/\d.*/);
+    if (!latestVersion) {
       return;
     }
 
-    const latestV = latest.version.match(/\d.*/);
-    if (!latestV) {
+    if (versionCompare(latestVersion[0], currentVersion) <= 0) {
       return;
     }
 
-    if (versionCompare(latestV[0], old) <= 0) {
-      return;
-    }
-
-    const msg = `Sumneko lua-language-server has a new release: ${latest.version}, you're using v${old}.`;
+    const msg = `Sumneko lua-language-server has a new release: ${latest.version}, you're using v${currentVersion}.`;
     if (this.config.prompt) {
       const ret = await window.showQuickpick(['Download the latest server', 'Cancel'], msg);
       if (ret === 0) {

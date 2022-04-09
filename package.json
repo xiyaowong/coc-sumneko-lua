@@ -94,7 +94,12 @@
         "sumneko-lua.checkUpdate": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically check for updates after startup"
+          "description": "Automatically check for updates after startup(Only one check within 4 hours)"
+        },
+        "sumneko-lua.serverDir": {
+          "type": "string",
+          "default": null,
+          "description": "The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default"
         },
         "sumneko-lua.inlayHints.typeHintsPrefix": {
           "type": "string",
@@ -1104,7 +1109,7 @@
               "type": "string"
             },
             "unknown-diag-code": {
-              "default": "Waiting",
+              "default": "Warning",
               "description": "%config.diagnostics.unknown-diag-code%",
               "enum": [
                 "Error",
@@ -1174,6 +1179,17 @@
           "markdownDescription": "Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.",
           "scope": "resource",
           "type": "integer"
+        },
+        "Lua.format.defaultConfig": {
+          "markdownDescription": "%config.format.defaultConfig%",
+          "scope": "resource",
+          "type": "object"
+        },
+        "Lua.format.enable": {
+          "default": "true",
+          "markdownDescription": "Enable code formatter.",
+          "scope": "resource",
+          "type": "boolean"
         },
         "Lua.hint.arrayIndex": {
           "default": "Auto",
@@ -1562,6 +1578,9 @@
           "default": null,
           "markdownDescription": "Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Privacy-Policy).\n",
           "scope": "resource",
+          "tags": [
+            "telemetry"
+          ],
           "type": [
             "boolean",
             "null"

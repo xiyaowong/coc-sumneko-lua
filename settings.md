@@ -26,7 +26,11 @@
 ## `sumneko-lua.checkUpdate`
 - type: `boolean`
 - default: `true`
-- description:    Automatically check for updates after startup
+- description:    Automatically check for updates after startup(Only one check within 4 hours)
+## `sumneko-lua.serverDir`
+- type: `string`
+- default: `null`
+- description:    The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default
 ## `sumneko-lua.inlayHints.typeHintsPrefix`
 - type: `string`
 - default: `« `
@@ -138,6 +142,14 @@
 - type: `integer`
 - default: `100`
 - description:    Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.
+## `Lua.format.defaultConfig`
+- type: `object`
+- default: `undefined`
+- description:    %config.format.defaultConfig%
+## `Lua.format.enable`
+- type: `boolean`
+- default: `true`
+- description:    Enable code formatter.
 ## `Lua.hint.arrayIndex`
 - type: `string`
 - default: `Auto`

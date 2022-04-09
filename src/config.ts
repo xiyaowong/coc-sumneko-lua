@@ -34,6 +34,10 @@ export class Config {
     return this.cfg.get<boolean>('checkUpdate');
   }
 
+  get serverDir() {
+    return this.cfg.get<string>('serverDir');
+  }
+
   get inlayHints() {
     const hasVirtualText = workspace.isNvim && workspace.nvim.hasFunction('nvim_buf_set_virtual_text');
     return {

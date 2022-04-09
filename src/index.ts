@@ -38,7 +38,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
         return;
       }
     } else {
-      window.showMessage(`You can run ':CocCommand sumneko-lua.install' to install server manually`);
+      window.showMessage(
+        `You can run ':CocCommand sumneko-lua.install' to install server manually or provide setting 'serverDir'`
+      );
       return;
     }
   }
