@@ -2,7 +2,8 @@
 
 Lua extension using sumneko lua-language-server for coc.nvim
 
-This extension uses server binaries extracted from [`sumneko/vscode-lua`](https://github.com/sumneko/vscode-lua)
+This extension uses server binaries extracted from [`sumneko/vscode-lua`](https://github.com/sumneko/vscode-lua).
+You can also custom the server path([`sumneko-lua.serverDir`](https://github.com/xiyaowong/coc-sumneko-lua/blob/main/settings.md#sumneko-luaserverdir)).
 
 ## Features
 
