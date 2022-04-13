@@ -31,13 +31,9 @@ export type Cmd = (...args: any[]) => unknown;
 export class Ctx {
   client!: LanguageClient;
   public readonly config = new Config();
-  private inlayHintsController: InlayHintsController;
   barTooltip = '';
 
-  constructor(public readonly extCtx: ExtensionContext) {
-    this.inlayHintsController = new InlayHintsController(this);
-    this.extCtx.subscriptions.push(this.inlayHintsController);
-  }
+  constructor(public readonly extCtx: ExtensionContext) {}
 
   registerCommand(name: string, factory: (ctx: Ctx) => Cmd, internal = false) {
     const fullName = `sumneko-lua.${name}`;
@@ -212,7 +208,7 @@ export class Ctx {
     // activate components
     this.activateCommand();
     this.activateStatusBar();
-    await this.activateInlayHints();
+    this.activateInlayHints();
   }
 
   activateStatusBar() {
@@ -286,8 +282,8 @@ export class Ctx {
     await workspace.nvim.command('hi default link CocLuaTypeHint  CocCodeLens');
     await workspace.nvim.command('hi default link CocLuaParamHint CocCodeLens');
 
-    if (this.config.inlayHints) {
-      this.inlayHintsController.activate();
-    }
+    const inlayHintsController = new InlayHintsController(this);
+    this.extCtx.subscriptions.push(inlayHintsController);
+    inlayHintsController.activate();
   }
 }

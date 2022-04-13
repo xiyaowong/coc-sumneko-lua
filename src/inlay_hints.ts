@@ -1,7 +1,5 @@
-import { Disposable, Document, events, Position, Range, workspace } from 'coc.nvim';
+import { ConfigurationChangeEvent, Disposable, Document, events, Neovim, Position, Range, workspace } from 'coc.nvim';
 import { Ctx, isLuaDocument } from './ctx';
-
-const inlayHintsNS = workspace.createNameSpace('lua-inlay-hint');
 
 const enum HintKind {
   TypeHint = 1,
@@ -14,19 +12,40 @@ export interface InlayHint {
   text: string;
 }
 
+export interface InlayHintsConfig {
+  ns: number;
+  enabled: boolean;
+  typeHintsPrefix: string;
+  paramHintsPrefix: string;
+  trimSemicolon: boolean;
+}
+
 export class InlayHintsController implements Disposable {
   private readonly disposables: Disposable[] = [];
-  private inlayHintsEnabled: boolean;
-  private inlayTypeHintsPrefix: string;
-  private inlayParamHintsPrefix: string;
-  private inlayHintsTrimSemicolon: boolean;
+  private nvim: Neovim;
+  private nvim6: boolean;
+  private config!: InlayHintsConfig;
 
   constructor(private readonly ctx: Ctx) {
-    const inlayHints = ctx.config.inlayHints;
-    this.inlayHintsEnabled = !!inlayHints.enable;
-    this.inlayTypeHintsPrefix = inlayHints.typeHintsPrefix;
-    this.inlayParamHintsPrefix = inlayHints.paramHintsPrefix;
-    this.inlayHintsTrimSemicolon = inlayHints.trimSemicolon;
+    this.setConfiguration();
+    this.nvim = workspace.nvim;
+    this.nvim.createNamespace('nvim_create_namespace').then((id) => {
+      this.config.ns = id;
+    });
+    this.nvim6 = workspace.has('nvim-0.6.0');
+
+    workspace.onDidChangeConfiguration(this.setConfiguration, this, this.disposables);
+  }
+
+  private setConfiguration(e?: ConfigurationChangeEvent) {
+    if (e && !(e.affectsConfiguration('sumneko-lua') || e.affectsConfiguration('Lua'))) return;
+    const inlayHints = this.ctx.config.inlayHints;
+    this.config = Object.assign(this.config || {}, {
+      enabled: !!inlayHints.enable,
+      typeHintsPrefix: inlayHints.typeHintsPrefix,
+      paramHintsPrefix: inlayHints.paramHintsPrefix,
+      trimSemicolon: !!inlayHints.trimSemicolon,
+    });
   }
 
   dispose() {
@@ -55,7 +74,7 @@ export class InlayHintsController implements Disposable {
       (e) => {
         const doc = workspace.getDocument(e.bufnr);
         if (doc && isLuaDocument(doc.textDocument)) {
-          if (workspace.insertMode && !this.ctx.config.inlayHints.refreshOnInsertMode) {
+          if (events.insertMode && !this.ctx.config.inlayHints.refreshOnInsertMode) {
             return;
           }
           this.fetchAndRenderHints(doc);
@@ -99,7 +118,10 @@ export class InlayHintsController implements Disposable {
   }
 
   private async fetchAndRenderHints(doc: Document) {
-    if (!(this.inlayHintsEnabled && doc && isLuaDocument(doc.textDocument))) return;
+    if (!(this.config.enabled && doc && isLuaDocument(doc.textDocument))) {
+      doc.buffer.clearNamespace(this.config.ns);
+      return;
+    }
 
     try {
       const hints = await this.fetchHints(doc);
@@ -128,7 +150,7 @@ export class InlayHintsController implements Disposable {
   }
 
   private async renderHints(doc: Document, hints: InlayHint[]) {
-    doc.buffer.clearNamespace(inlayHintsNS);
+    doc.buffer.clearNamespace(this.config.ns);
 
     const newHints: { [key: string]: { typeHints: string[]; paramHints: string[] } } = {};
 
@@ -137,9 +159,9 @@ export class InlayHintsController implements Disposable {
       newHints[line] = newHints[line] ? newHints[line] : { typeHints: [], paramHints: [] };
 
       if (hint.kind === HintKind.TypeHint) {
-        newHints[line].typeHints.push(this.inlayHintsTrimSemicolon ? hint.text.replace(':', '') : hint.text);
+        newHints[line].typeHints.push(this.config.trimSemicolon ? hint.text.replace(':', '') : hint.text);
       } else if (hint.kind === HintKind.ParamHint) {
-        newHints[line].paramHints.push(this.inlayHintsTrimSemicolon ? hint.text.replace(':', '') : hint.text);
+        newHints[line].paramHints.push(this.config.trimSemicolon ? hint.text.replace(':', '') : hint.text);
       }
     }
 
@@ -149,14 +171,20 @@ export class InlayHintsController implements Disposable {
       const { paramHints, typeHints } = newHints[line];
 
       if (paramHints.length > 0) {
-        chunks.push([` ${this.inlayParamHintsPrefix}(${paramHints.join(', ')})`, 'CocLuaParamHint']);
+        chunks.push([` ${this.config.paramHintsPrefix}(${paramHints.join(', ')})`, 'CocLuaParamHint']);
       }
 
       if (typeHints.length > 0) {
-        chunks.push([` ${this.inlayTypeHintsPrefix}${typeHints.join(', ')}`, 'CocLuaTypeHint']);
+        chunks.push([` ${this.config.typeHintsPrefix}${typeHints.join(', ')}`, 'CocLuaTypeHint']);
       }
 
-      doc.buffer.setVirtualText(inlayHintsNS, Number(line), chunks, {});
+      const { ns } = this.config;
+      const lnum = Number(line);
+      if (this.nvim6) {
+        doc.buffer.setExtMark(ns, lnum, 0, { virt_text_pos: 'eol', hl_mode: 'combine', virt_text: chunks });
+      } else {
+        this.nvim.call('nvim_buf_set_virtual_text', [doc.bufnr, ns, lnum, chunks, {}], true);
+      }
     });
   }
 }

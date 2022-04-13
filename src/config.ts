@@ -4,10 +4,9 @@ export type Locale = 'en-us' | 'zh-cn';
 
 export class Config {
   private readonly rootSection = 'sumneko-lua';
-  private cfg: WorkspaceConfiguration;
 
-  constructor() {
-    this.cfg = workspace.getConfiguration(this.rootSection);
+  get cfg() {
+    return workspace.getConfiguration(this.rootSection);
   }
 
   get enabled() {
@@ -40,12 +39,13 @@ export class Config {
 
   get inlayHints() {
     const hasVirtualText = workspace.isNvim && workspace.nvim.hasFunction('nvim_buf_set_virtual_text');
+    const { cfg } = this;
     return {
       enable: hasVirtualText && workspace.getConfiguration('Lua.hint').get<boolean>('enable', false),
-      typeHintsPrefix: this.cfg.get<string>('inlayHints.typeHintsPrefix', '« '),
-      paramHintsPrefix: this.cfg.get<string>('inlayHints.paramHintsPrefix', '» '),
-      trimSemicolon: this.cfg.get<boolean>('inlayHints.trimSemicolon', true),
-      refreshOnInsertMode: hasVirtualText && this.cfg.get<boolean>('inlayHints.refreshOnInsertMode', false),
+      typeHintsPrefix: cfg.get<string>('inlayHints.typeHintsPrefix', '« '),
+      paramHintsPrefix: cfg.get<string>('inlayHints.paramHintsPrefix', '» '),
+      trimSemicolon: cfg.get<boolean>('inlayHints.trimSemicolon', true),
+      refreshOnInsertMode: hasVirtualText && cfg.get<boolean>('inlayHints.refreshOnInsertMode', false),
     };
   }
 }
