@@ -121,9 +121,7 @@ export class Ctx {
     if (this.config.prompt) {
       const ret = await window.showQuickpick(['Download the latest server', 'Cancel'], msg);
       if (ret === 0) {
-        if (process.platform === 'win32') {
-          await this.client.stop();
-        }
+        await this.client.stop();
         try {
           await downloadServer(this.extCtx, latest);
         } catch (e) {
@@ -131,7 +129,6 @@ export class Ctx {
           window.showMessage('Upgrade server failed', 'error');
           return;
         }
-        await this.client.stop();
         this.client.start();
       } else {
         window.showMessage(`You can run ':CocCommand sumneko-lua.install' to upgrade server manually`);
