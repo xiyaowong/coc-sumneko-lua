@@ -1,6 +1,6 @@
-import { workspace, WorkspaceConfiguration } from 'coc.nvim';
+import { workspace } from 'coc.nvim';
 
-export type Locale = 'en-us' | 'zh-cn';
+export type Locale = 'en-us' | 'pt-br' | 'zh-cn' | 'zh-tw';
 
 export class Config {
   private readonly rootSection = 'sumneko-lua';
