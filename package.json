@@ -72,12 +72,14 @@
           "enum": [
             "en-us",
             "zh-cn",
+            "zh-tw",
             "pt-br"
           ],
           "description": "The localized language used",
           "enumDescriptions": [
             "`\"en-us\"` English",
             "`\"zh-cn\"` 简体中文",
+            "`\"zh-tw\"` 繁體中文",
             "`\"pt-br\"` Português"
           ]
         },
@@ -295,7 +297,7 @@
           "properties": {
             "ambiguity-1": {
               "default": "Any",
-              "description": "%config.diagnostics.ambiguity-1%",
+              "description": "优先级歧义，如：`num or 0 + 1`，推测用户的实际期望为 `(num or 0) + 1` ",
               "enum": [
                 "Any",
                 "Opened",
@@ -435,7 +437,7 @@
             },
             "duplicate-index": {
               "default": "Any",
-              "description": "%config.diagnostics.duplicate-index%",
+              "description": "在字面量表中重复定义了索引",
               "enum": [
                 "Any",
                 "Opened",
@@ -455,7 +457,7 @@
             },
             "empty-block": {
               "default": "Opened",
-              "description": "%config.diagnostics.empty-block%",
+              "description": "空代码块",
               "enum": [
                 "Any",
                 "Opened",
@@ -465,7 +467,7 @@
             },
             "global-in-nil-env": {
               "default": "Any",
-              "description": "%config.diagnostics.global-in-nil-env%",
+              "description": "不能使用全局变量（ `_ENV` 被设置为了 `nil`）",
               "enum": [
                 "Any",
                 "Opened",
@@ -475,7 +477,7 @@
             },
             "lowercase-global": {
               "default": "Any",
-              "description": "%config.diagnostics.lowercase-global%",
+              "description": "首字母小写的全局变量定义",
               "enum": [
                 "Any",
                 "Opened",
@@ -485,7 +487,7 @@
             },
             "newfield-call": {
               "default": "Any",
-              "description": "%config.diagnostics.newfield-call%",
+              "description": "在字面量表中，2行代码之间缺少分隔符，在语法上被解析为了一次索引操作",
               "enum": [
                 "Any",
                 "Opened",
@@ -495,7 +497,7 @@
             },
             "newline-call": {
               "default": "Any",
-              "description": "%config.diagnostics.newline-call%",
+              "description": "以 `(` 开始的新行，在语法上被解析为了上一行的函数调用",
               "enum": [
                 "Any",
                 "Opened",
@@ -525,7 +527,7 @@
             },
             "redefined-local": {
               "default": "Opened",
-              "description": "%config.diagnostics.redefined-local%",
+              "description": "重复定义的局部变量",
               "enum": [
                 "Any",
                 "Opened",
@@ -535,7 +537,7 @@
             },
             "redundant-parameter": {
               "default": "Opened",
-              "description": "%config.diagnostics.redundant-parameter%",
+              "description": "函数调用时，传入了多余的参数",
               "enum": [
                 "Any",
                 "Opened",
@@ -555,7 +557,7 @@
             },
             "redundant-value": {
               "default": "Opened",
-              "description": "%config.diagnostics.redundant-value%",
+              "description": "赋值操作时，值的数量比被赋值的对象多",
               "enum": [
                 "Any",
                 "Opened",
@@ -565,7 +567,7 @@
             },
             "trailing-space": {
               "default": "Opened",
-              "description": "%config.diagnostics.trailing-space%",
+              "description": "后置空格",
               "enum": [
                 "Any",
                 "Opened",
@@ -625,7 +627,7 @@
             },
             "undefined-env-child": {
               "default": "Any",
-              "description": "%config.diagnostics.undefined-env-child%",
+              "description": "`_ENV` 被设置为了新的字面量表，但是试图获取的全局变量不再这张表中",
               "enum": [
                 "Any",
                 "Opened",
@@ -645,7 +647,7 @@
             },
             "undefined-global": {
               "default": "Any",
-              "description": "%config.diagnostics.undefined-global%",
+              "description": "未定义的全局变量",
               "enum": [
                 "Any",
                 "Opened",
@@ -665,7 +667,7 @@
             },
             "unused-function": {
               "default": "Opened",
-              "description": "%config.diagnostics.unused-function%",
+              "description": "未使用的函数",
               "enum": [
                 "Any",
                 "Opened",
@@ -675,7 +677,7 @@
             },
             "unused-label": {
               "default": "Opened",
-              "description": "%config.diagnostics.unused-label%",
+              "description": "未使用的标签",
               "enum": [
                 "Any",
                 "Opened",
@@ -685,7 +687,7 @@
             },
             "unused-local": {
               "default": "Opened",
-              "description": "%config.diagnostics.unused-local%",
+              "description": "未使用的局部变量",
               "enum": [
                 "Any",
                 "Opened",
@@ -695,7 +697,7 @@
             },
             "unused-vararg": {
               "default": "Opened",
-              "description": "%config.diagnostics.unused-vararg%",
+              "description": "未使用的不定参数",
               "enum": [
                 "Any",
                 "Opened",
@@ -714,7 +716,7 @@
           "properties": {
             "ambiguity-1": {
               "default": "Warning",
-              "description": "%config.diagnostics.ambiguity-1%",
+              "description": "优先级歧义，如：`num or 0 + 1`，推测用户的实际期望为 `(num or 0) + 1` ",
               "enum": [
                 "Error",
                 "Warning",
@@ -868,7 +870,7 @@
             },
             "duplicate-index": {
               "default": "Warning",
-              "description": "%config.diagnostics.duplicate-index%",
+              "description": "在字面量表中重复定义了索引",
               "enum": [
                 "Error",
                 "Warning",
@@ -890,7 +892,7 @@
             },
             "empty-block": {
               "default": "Hint",
-              "description": "%config.diagnostics.empty-block%",
+              "description": "空代码块",
               "enum": [
                 "Error",
                 "Warning",
@@ -901,7 +903,7 @@
             },
             "global-in-nil-env": {
               "default": "Warning",
-              "description": "%config.diagnostics.global-in-nil-env%",
+              "description": "不能使用全局变量（ `_ENV` 被设置为了 `nil`）",
               "enum": [
                 "Error",
                 "Warning",
@@ -912,7 +914,7 @@
             },
             "lowercase-global": {
               "default": "Information",
-              "description": "%config.diagnostics.lowercase-global%",
+              "description": "首字母小写的全局变量定义",
               "enum": [
                 "Error",
                 "Warning",
@@ -923,7 +925,7 @@
             },
             "newfield-call": {
               "default": "Warning",
-              "description": "%config.diagnostics.newfield-call%",
+              "description": "在字面量表中，2行代码之间缺少分隔符，在语法上被解析为了一次索引操作",
               "enum": [
                 "Error",
                 "Warning",
@@ -934,7 +936,7 @@
             },
             "newline-call": {
               "default": "Information",
-              "description": "%config.diagnostics.newline-call%",
+              "description": "以 `(` 开始的新行，在语法上被解析为了上一行的函数调用",
               "enum": [
                 "Error",
                 "Warning",
@@ -967,7 +969,7 @@
             },
             "redefined-local": {
               "default": "Hint",
-              "description": "%config.diagnostics.redefined-local%",
+              "description": "重复定义的局部变量",
               "enum": [
                 "Error",
                 "Warning",
@@ -978,7 +980,7 @@
             },
             "redundant-parameter": {
               "default": "Warning",
-              "description": "%config.diagnostics.redundant-parameter%",
+              "description": "函数调用时，传入了多余的参数",
               "enum": [
                 "Error",
                 "Warning",
@@ -1000,7 +1002,7 @@
             },
             "redundant-value": {
               "default": "Warning",
-              "description": "%config.diagnostics.redundant-value%",
+              "description": "赋值操作时，值的数量比被赋值的对象多",
               "enum": [
                 "Error",
                 "Warning",
@@ -1011,7 +1013,7 @@
             },
             "trailing-space": {
               "default": "Hint",
-              "description": "%config.diagnostics.trailing-space%",
+              "description": "后置空格",
               "enum": [
                 "Error",
                 "Warning",
@@ -1077,7 +1079,7 @@
             },
             "undefined-env-child": {
               "default": "Information",
-              "description": "%config.diagnostics.undefined-env-child%",
+              "description": "`_ENV` 被设置为了新的字面量表，但是试图获取的全局变量不再这张表中",
               "enum": [
                 "Error",
                 "Warning",
@@ -1099,7 +1101,7 @@
             },
             "undefined-global": {
               "default": "Warning",
-              "description": "%config.diagnostics.undefined-global%",
+              "description": "未定义的全局变量",
               "enum": [
                 "Error",
                 "Warning",
@@ -1121,7 +1123,7 @@
             },
             "unused-function": {
               "default": "Hint",
-              "description": "%config.diagnostics.unused-function%",
+              "description": "未使用的函数",
               "enum": [
                 "Error",
                 "Warning",
@@ -1132,7 +1134,7 @@
             },
             "unused-label": {
               "default": "Hint",
-              "description": "%config.diagnostics.unused-label%",
+              "description": "未使用的标签",
               "enum": [
                 "Error",
                 "Warning",
@@ -1143,7 +1145,7 @@
             },
             "unused-local": {
               "default": "Hint",
-              "description": "%config.diagnostics.unused-local%",
+              "description": "未使用的局部变量",
               "enum": [
                 "Error",
                 "Warning",
@@ -1154,7 +1156,7 @@
             },
             "unused-vararg": {
               "default": "Hint",
-              "description": "%config.diagnostics.unused-vararg%",
+              "description": "未使用的不定参数",
               "enum": [
                 "Error",
                 "Warning",
