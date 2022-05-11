@@ -1188,7 +1188,7 @@
           "type": "object"
         },
         "Lua.format.enable": {
-          "default": "true",
+          "default": true,
           "markdownDescription": "Enable code formatter.",
           "scope": "resource",
           "type": "boolean"
