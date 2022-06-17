@@ -47,22 +47,6 @@
 - type: `boolean`
 - default: `false`
 - description:    Whether to refresh inlayHints on insert mode
-## `Lua.IntelliSense.traceBeSetted`
-- type: `boolean`
-- default: `false`
-- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
-## `Lua.IntelliSense.traceFieldInject`
-- type: `boolean`
-- default: `false`
-- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
-## `Lua.IntelliSense.traceLocalSet`
-- type: `boolean`
-- default: `false`
-- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
-## `Lua.IntelliSense.traceReturn`
-- type: `boolean`
-- default: `false`
-- description:    Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/IntelliSense-optional-features) to learn more.
 ## `Lua.completion.autoRequire`
 - type: `boolean`
 - default: `true`
@@ -105,15 +89,19 @@
 - description:    Whether the displayed context word contains the content of other files in the workspace.
 ## `Lua.diagnostics.disable`
 - type: `array`
-- default: `undefined`
+- default: ``
 - description:    Disabled diagnostic (Use code in hover brackets).
+## `Lua.diagnostics.disableScheme`
+- type: `array`
+- default: `git`
+- description:    Do not diagnose Lua files that use the following scheme.
 ## `Lua.diagnostics.enable`
 - type: `boolean`
 - default: `true`
 - description:    Enable diagnostics.
 ## `Lua.diagnostics.globals`
 - type: `array`
-- default: `undefined`
+- default: ``
 - description:    Defined global variables.
 ## `Lua.diagnostics.ignoredFiles`
 - type: `string`
@@ -144,7 +132,7 @@
 - description:    Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.
 ## `Lua.format.defaultConfig`
 - type: `object`
-- default: `undefined`
+- default: ``
 - description:    %config.format.defaultConfig%
 ## `Lua.format.enable`
 - type: `boolean`
@@ -154,6 +142,10 @@
 - type: `string`
 - default: `Auto`
 - description:    Show hints of array index when constructing a table.
+## `Lua.hint.await`
+- type: `boolean`
+- default: `true`
+- description:    If the called function is marked `---@async`, prompt `await` at the call.
 ## `Lua.hint.enable`
 - type: `boolean`
 - default: `true`
@@ -178,6 +170,11 @@
 - type: `integer`
 - default: `5`
 - description:    When the value corresponds to multiple types, limit the number of types displaying.
+## `Lua.hover.expandAlias`
+- type: `boolean`
+- default: `true`
+- description:    Whether to expand the alias. For example, expands `---@alias myType boolean|number` appears as `boolean|number`, otherwise it appears as `myType'.
+
 ## `Lua.hover.previewFields`
 - type: `integer`
 - default: `20`
@@ -211,9 +208,13 @@
 - type: `string`
 - default: `utf8`
 - description:    File encoding. The `ansi` option is only available under the `Windows` platform.
+## `Lua.runtime.meta`
+- type: `string`
+- default: `${version} ${language} ${encoding}`
+- description:    %config.runtime.meta%
 ## `Lua.runtime.nonstandardSymbol`
 - type: `array`
-- default: `undefined`
+- default: ``
 - description:    Supports non-standard symbols. Make sure that your runtime environment supports these symbols.
 ## `Lua.runtime.path`
 - type: `array`
@@ -233,7 +234,7 @@ If you want to load files outside the workspace, you need to set `Lua.workspace.
 - description:    Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugin) to learn more.
 ## `Lua.runtime.special`
 - type: `object`
-- default: `undefined`
+- default: ``
 - description:    The custom global variables are regarded as some special built-in variables, and the language server will provide special support
 The following example shows that 'include' is treated as' require '.
 ```json
@@ -270,6 +271,10 @@ The following example shows that 'include' is treated as' require '.
 - type: `boolean`
 - default: `true`
 - description:    Enable signature help.
+## `Lua.spell.dict`
+- type: `array`
+- default: ``
+- description:    %config.spell.dict%
 ## `Lua.telemetry.enable`
 - type: `boolean,null`
 - default: `null`
@@ -305,7 +310,7 @@ The following example shows that 'include' is treated as' require '.
 - description:    Ignore submodules.
 ## `Lua.workspace.library`
 - type: `array`
-- default: `undefined`
+- default: ``
 - description:    In addition to the current workspace, which directories will load files from. The files in these directories will be treated as externally provided code libraries, and some features (such as renaming fields) will not modify these files.
 ## `Lua.workspace.maxPreload`
 - type: `integer`
@@ -315,11 +320,15 @@ The following example shows that 'include' is treated as' require '.
 - type: `integer`
 - default: `500`
 - description:    Skip files larger than this value (KB) when preloading.
+## `Lua.workspace.supportScheme`
+- type: `array`
+- default: `file,untitled,git`
+- description:    Provide language server for the Lua files of the following scheme.
 ## `Lua.workspace.useGitIgnore`
 - type: `boolean`
 - default: `true`
 - description:    Ignore files list in `.gitignore` .
 ## `Lua.workspace.userThirdParty`
 - type: `array`
-- default: `undefined`
+- default: ``
 - description:    Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/sumneko/lua-language-server/tree/master/meta/3rd)
