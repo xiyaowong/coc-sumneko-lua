@@ -1,3 +1,4 @@
+// TODO: upgrade coc.nvim and register InlayHint provider
 import { ConfigurationChangeEvent, Disposable, Document, events, Neovim, Position, Range, workspace } from 'coc.nvim';
 import { Ctx, isLuaDocument } from './ctx';
 

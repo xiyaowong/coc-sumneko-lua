@@ -6,6 +6,7 @@ import {
   ExtensionContext,
   LanguageClient,
   LanguageClientOptions,
+  languages,
   ServerOptions,
   services,
   TextDocument,
@@ -180,6 +181,7 @@ export class Ctx {
               library.push(runtime);
             }
             const types = `${path.dirname(path.dirname(__filename))}/nvim_lua_types`;
+            console.log(types);
             if (!library.includes(types)) {
               library.push(types);
             }

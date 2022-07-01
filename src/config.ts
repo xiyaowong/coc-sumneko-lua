@@ -44,6 +44,7 @@ export class Config {
       enable: hasVirtualText && workspace.getConfiguration('Lua.hint').get<boolean>('enable', false),
       typeHintsPrefix: cfg.get<string>('inlayHints.typeHintsPrefix', '« '),
       paramHintsPrefix: cfg.get<string>('inlayHints.paramHintsPrefix', '» '),
+      // TODO: remove trimSemicolon, as it's supported by the server. Lua.hint.semicolon
       trimSemicolon: cfg.get<boolean>('inlayHints.trimSemicolon', true),
       refreshOnInsertMode: hasVirtualText && cfg.get<boolean>('inlayHints.refreshOnInsertMode', false),
     };
