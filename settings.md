@@ -103,6 +103,25 @@
 - type: `array`
 - default: ``
 - description:    Defined global variables.
+## `Lua.diagnostics.groupFileStatus`
+- type: `object`
+- default: `undefined`
+- description:    Modify the diagnostic needed file status in a group.
+
+* Opened:  only diagnose opened files
+* Any:     diagnose all files
+* None:    disable this diagnostic
+
+`Fallback` means that diagnostics in this group are controlled by `diagnostics.neededFileStatus` separately.
+Other settings will override individual settings without end of `!`.
+
+## `Lua.diagnostics.groupSeverity`
+- type: `object`
+- default: `undefined`
+- description:    Modify the diagnostic severity in a group.
+`Fallback` means that diagnostics in this group are controlled by `diagnostics.severity` separately.
+Other settings will override individual settings without end of `!`.
+
 ## `Lua.diagnostics.ignoredFiles`
 - type: `string`
 - default: `Opened`
@@ -116,12 +135,17 @@
 - default: `undefined`
 - description:    * Opened:  only diagnose opened files
 * Any:     diagnose all files
-* Disable: disable this diagnostic
+* None:    disable this diagnostic
+
+End with `!` means override the group setting `diagnostics.groupFileStatus`.
 
 ## `Lua.diagnostics.severity`
 - type: `object`
 - default: `undefined`
-- description:    Modified diagnostic severity.
+- description:    Modify the diagnostic severity.
+
+End with `!` means override the group setting `diagnostics.groupSeverity`.
+
 ## `Lua.diagnostics.workspaceDelay`
 - type: `integer`
 - default: `3000`
@@ -132,8 +156,10 @@
 - description:    Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.
 ## `Lua.format.defaultConfig`
 - type: `object`
-- default: ``
-- description:    %config.format.defaultConfig%
+- default: `[object Object]`
+- description:    The default format configuration. Has a lower priority than `.editorconfig` file in the workspace.
+Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/docs) to learn usage.
+
 ## `Lua.format.enable`
 - type: `boolean`
 - default: `true`
@@ -158,6 +184,10 @@
 - type: `boolean`
 - default: `true`
 - description:    Show type hints at the parameter of the function.
+## `Lua.hint.semicolon`
+- type: `string`
+- default: `SameLine`
+- description:    If there is no semicolon at the end of the statement, display a virtual semicolon.
 ## `Lua.hint.setType`
 - type: `boolean`
 - default: `false`
@@ -177,7 +207,7 @@
 
 ## `Lua.hover.previewFields`
 - type: `integer`
-- default: `20`
+- default: `50`
 - description:    When hovering to view a table, limits the maximum number of previews for fields.
 ## `Lua.hover.viewNumber`
 - type: `boolean`
@@ -211,7 +241,7 @@
 ## `Lua.runtime.meta`
 - type: `string`
 - default: `${version} ${language} ${encoding}`
-- description:    %config.runtime.meta%
+- description:    Format of the directory name of the meta files.
 ## `Lua.runtime.nonstandardSymbol`
 - type: `array`
 - default: ``
@@ -234,7 +264,7 @@ If you want to load files outside the workspace, you need to set `Lua.workspace.
 - description:    Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugin) to learn more.
 ## `Lua.runtime.special`
 - type: `object`
-- default: ``
+- default: `[object Object]`
 - description:    The custom global variables are regarded as some special built-in variables, and the language server will provide special support
 The following example shows that 'include' is treated as' require '.
 ```json
@@ -274,11 +304,22 @@ The following example shows that 'include' is treated as' require '.
 ## `Lua.spell.dict`
 - type: `array`
 - default: ``
-- description:    %config.spell.dict%
+- description:    Custom words for spell checking.
 ## `Lua.telemetry.enable`
 - type: `boolean,null`
 - default: `null`
 - description:    Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Privacy-Policy).
+
+## `Lua.type.castNumberToInteger`
+- type: `boolean`
+- default: `false`
+- description:    Allowed to assign the `number` type to the `integer` type.
+## `Lua.type.weakUnionCheck`
+- type: `boolean`
+- default: `false`
+- description:    Once one subtype of a union type meets the condition, the union type also meets the condition.
+
+When this setting is `false`, the `number|boolean` type cannot be assigned to the `number` type. It can be with `true`.
 
 ## `Lua.window.progressBar`
 - type: `boolean`
