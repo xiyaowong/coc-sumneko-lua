@@ -1,0 +1,11 @@
+nvim_lua_data
+.github
+src
+scripts
+coc-sumneko-lua.json
+esbuild.json
+.eslintrc.js
+esbuild.json
+tsconfig.json
+yarn.lock
+update-config.js
