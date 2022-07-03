@@ -4,7 +4,7 @@
 -- Prompts the user for input
 --- @param opts any #table Additional options. See |input()|
 ---                   • prompt (string|nil) Text of the prompt.
----                     Defaults to `Input:` .
+---                     Defaults to `Input:`.
 ---                   • default (string|nil) Default reply to the
 ---                     input
 ---                   • completion (string|nil) Specifies type of
@@ -29,16 +29,16 @@ function vim.ui.input(opts, on_confirm) end
 ---                    Defaults to `Select one of:`
 ---                  • format_item (function item -> text)
 ---                    Function to format an individual item from
----                    `items` . Defaults to `tostring` .
+---                    `items`. Defaults to `tostring`.
 ---                  • kind (string|nil) Arbitrary hint string
 ---                    indicating the item shape. Plugins
 ---                    reimplementing `vim.ui.select` may wish to
 ---                    use this to infer the structure or
----                    semantics of `items` , or the context in
+---                    semantics of `items`, or the context in
 ---                    which select() was called.
 --- @param on_choice any #function ((item|nil, idx|nil) -> ()) Called
 ---                  once the user made a choice. `idx` is the
----                  1-based index of `item` within `item` . `nil`
+---                  1-based index of `item` within `items`. `nil`
 ---                  if the user aborted the dialog.
 function vim.ui.select(items, opts, on_choice) end
 

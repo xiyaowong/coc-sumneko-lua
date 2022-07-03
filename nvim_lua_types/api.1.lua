@@ -1,6 +1,103 @@
 --# selene: allow(unused_variable)
 ---@diagnostic disable: unused-local
 
+-- Writes a message to the Vim output buffer. Does not append
+-- "\n", the message is buffered (won't display) until a linefeed
+-- is written.
+--- @param str string #Message
+function vim.api.nvim_out_write(str) end
+
+-- Parse a VimL expression.
+--- @param expr string #Expression to parse. Always treated as a
+---                  single line.
+--- @param flags string #Flags:
+---                  • "m" if multiple expressions in a row are
+---                    allowed (only the first one will be
+---                    parsed),
+---                  • "E" if EOC tokens are not allowed
+---                    (determines whether they will stop parsing
+---                    process or be recognized as an
+---                    operator/space, though also yielding an
+---                    error).
+---                  • "l" when needing to start parsing with
+---                    lvalues for ":let" or ":for". Common flag
+---                    sets:
+---                  • "m" to parse like for ":echo".
+---                  • "E" to parse like for "<C-r>=".
+---                  • empty string for ":call".
+---                  • "lm" to parse for ":let".
+--- @param highlight boolean #If true, return value will also include
+---                  "highlight" key containing array of 4-tuples
+---                  (arrays) (Integer, Integer, Integer, String),
+---                  where first three numbers define the
+---                  highlighted region and represent line,
+---                  starting column and ending column (latter
+---                  exclusive: one should highlight region
+---                  [start_col, end_col)).
+--- @return any #
+---     • AST: top-level dictionary with these keys:
+---       • "error": Dictionary with error, present only if parser
+---         saw some error. Contains the following keys:
+---         • "message": String, error message in printf format,
+---           translated. Must contain exactly one "%.*s".
+---         • "arg": String, error message argument.
+---
+---       • "len": Amount of bytes successfully parsed. With flags
+---         equal to "" that should be equal to the length of expr
+---         string. (“Successfully parsed” here means
+---         “participated in AST creation”, not “till the first
+---         error”.)
+---       • "ast": AST, either nil or a dictionary with these
+---         keys:
+---         • "type": node type, one of the value names from
+---           ExprASTNodeType stringified without "kExprNode"
+---           prefix.
+---         • "start": a pair [line, column] describing where node
+---           is "started" where "line" is always 0 (will not be 0
+---           if you will be using nvim_parse_viml() on e.g.
+---           ":let", but that is not present yet). Both elements
+---           are Integers.
+---         • "len": “length” of the node. This and "start" are
+---           there for debugging purposes primary (debugging
+---           parser and providing debug information).
+---         • "children": a list of nodes described in top/"ast".
+---           There always is zero, one or two children, key will
+---           not be present if node has no children. Maximum
+---           number of children may be found in node_maxchildren
+---           array.
+---
+---
+---     • Local values (present only for certain nodes):
+---       • "scope": a single Integer, specifies scope for
+---         "Option" and "PlainIdentifier" nodes. For "Option" it
+---         is one of ExprOptScope values, for "PlainIdentifier"
+---         it is one of ExprVarScope values.
+---       • "ident": identifier (without scope, if any), present
+---         for "Option", "PlainIdentifier", "PlainKey" and
+---         "Environment" nodes.
+---       • "name": Integer, register name (one character) or -1.
+---         Only present for "Register" nodes.
+---       • "cmp_type": String, comparison type, one of the value
+---         names from ExprComparisonType, stringified without
+---         "kExprCmp" prefix. Only present for "Comparison"
+---         nodes.
+---       • "ccs_strategy": String, case comparison strategy, one
+---         of the value names from ExprCaseCompareStrategy,
+---         stringified without "kCCStrategy" prefix. Only present
+---         for "Comparison" nodes.
+---       • "augmentation": String, augmentation type for
+---         "Assignment" nodes. Is either an empty string, "Add",
+---         "Subtract" or "Concat" for "=", "+=", "-=" or ".="
+---         respectively.
+---       • "invert": Boolean, true if result of comparison needs
+---         to be inverted. Only present for "Comparison" nodes.
+---       • "ivalue": Integer, integer value for "Integer" nodes.
+---       • "fvalue": Float, floating-point value for "Float"
+---         nodes.
+---       • "svalue": String, value for "SingleQuotedString" and
+---         "DoubleQuotedString" nodes.
+function vim.api.nvim_parse_expression(expr, flags, highlight) end
+
 -- Pastes at cursor, in any mode.
 --- @param data string #Multiline input. May be binary (containing NUL
 ---              bytes).
@@ -46,7 +143,7 @@ function vim.api.nvim_replace_termcodes(str, from_part, do_lt, special) end
 --- @param insert boolean #Whether the selection should be inserted in the
 ---               buffer.
 --- @param finish boolean #Finish the completion and dismiss the popupmenu.
----               Implies `insert` .
+---               Implies `insert`.
 --- @param opts dictionary #Optional parameters. Reserved for future use.
 function vim.api.nvim_select_popupmenu_item(item, insert, finish, opts) end
 
@@ -136,21 +233,22 @@ function vim.api.nvim_set_current_win(window) end
 ---                ["end", tick]
 function vim.api.nvim_set_decoration_provider(ns_id, opts) end
 
--- Set a highlight group.
---- @param ns_id integer #number of namespace for this highlight. Use value
----              0 to set a highlight group in the global (
----              `:highlight` ) namespace.
---- @param name string #highlight group name, like ErrorMsg
---- @param val dict(highlight) * #highlight definition map, like
----              |nvim_get_hl_by_name|. in addition the following
----              keys are also recognized: `default` : don't
----              override existing definition, like `hi default`
----              `ctermfg` : sets foreground of cterm color
----              `ctermbg` : sets background of cterm color
----              `cterm` : cterm attribute map. sets attributed
----              for cterm colors. similer to `hi cterm` Note: by
----              default cterm attributes are same as attributes
----              of gui color
+-- Sets a highlight group.
+--- @param ns_id integer #Namespace id for this highlight
+---              |nvim_create_namespace()|. Use 0 to set a
+---              highlight group globally |:highlight|.
+--- @param name string #Highlight group name, e.g. "ErrorMsg"
+--- @param val dict(highlight) * #Highlight definition map, like |synIDattr()|. In
+---              addition, the following keys are recognized:
+---              • default: Don't override existing definition
+---                |:hi-default|
+---              • ctermfg: Sets foreground of cterm color
+---                |highlight-ctermfg|
+---              • ctermbg: Sets background of cterm color
+---                |highlight-ctermbg|
+---              • cterm: cterm attribute map, like
+---                |highlight-args|. Note: Attributes default to
+---                those set for `gui` if not set.
 function vim.api.nvim_set_hl(ns_id, name, val) end
 
 -- Sets a global |mapping| for the given mode.
@@ -194,7 +292,7 @@ function vim.api.nvim_set_var(name, value) end
 --- @param value object #Variable value
 function vim.api.nvim_set_vvar(name, value) end
 
--- Calculates the number of display cells occupied by `text` .
+-- Calculates the number of display cells occupied by `text`.
 -- <Tab> counts as one cell.
 --- @param text string #Some text
 --- @return any #Number of cells
@@ -383,13 +481,13 @@ function vim.api.nvim_win_set_buf(window, buffer) end
 function vim.api.nvim_win_set_config(window, config) end
 
 -- Sets the (1,0)-indexed cursor position in the window.
--- |api-indexing|
+-- |api-indexing| This scrolls the window even if it is not the
+-- current one.
 --- @param window window #Window handle, or 0 for current window
 --- @param pos number[] #(row, col) tuple representing the new position
 function vim.api.nvim_win_set_cursor(window, pos) end
 
--- Sets the window height. This will only succeed if the screen
--- is split horizontally.
+-- Sets the window height.
 --- @param window window #Window handle, or 0 for current window
 --- @param height integer #Height as a count of rows
 function vim.api.nvim_win_set_height(window, height) end

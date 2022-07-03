@@ -1,10 +1,12 @@
 --# selene: allow(unused_variable)
 ---@diagnostic disable: unused-local
 
+function vim.connection_failure_errmsg(consequence) end
+
 -- Deep compare values for equality
 --- @param a any #first value
 --- @param b any #second value
---- @return any #`true` if values are equals, else `false` .
+--- @return any #`true` if values are equals, else `false`.
 function vim.deep_equal(a, b) end
 
 -- Returns a deep copy of the given object. Non-table objects are
@@ -24,7 +26,7 @@ function vim.deepcopy(orig) end
 --- @return any #timer luv timer object
 function vim.defer_fn(fn, timeout) end
 
--- Tests if `s` ends with `suffix` .
+-- Tests if `s` ends with `suffix`.
 --- @param s any #(string) a string
 --- @param suffix any #(string) a suffix
 --- @return any #(boolean) true if `suffix` is a suffix of s
@@ -143,24 +145,24 @@ function vim.schedule_wrap(cb) end
 --- @return any #List-like table of the split components.
 function vim.split(s, sep, kwargs) end
 
--- Tests if `s` starts with `prefix` .
+-- Tests if `s` starts with `prefix`.
 --- @param s any #(string) a string
 --- @param prefix any #(string) a prefix
 --- @return any #(boolean) true if `prefix` is a prefix of s
 function vim.startswith(s, prefix) end
 
 -- Add the reverse lookup values to an existing table. For
--- example: tbl_add_reverse_lookup { A = 1 } == { [1] = 'A , A = 1 }`
+-- example: `tbl_add_reverse_lookup { A = 1 } == { [1] = 'A', A = 1 }`
 --- @param o any #table The table to add the reverse to.
 function vim.tbl_add_reverse_lookup(o) end
 
--- Checks if a list-like (vector) table contains `value` .
+-- Checks if a list-like (vector) table contains `value`.
 --- @param t any #Table to check
 --- @param value any #Value to compare
 --- @return any #true if `t` contains `value`
 function vim.tbl_contains(t, value) end
 
--- Counts the number of non-nil values in table `t` .
+-- Counts the number of non-nil values in table `t`.
 --- @param t any #Table
 --- @return any #Number that is the number of the value in table
 function vim.tbl_count(t) end
@@ -194,13 +196,26 @@ function vim.tbl_filter(func, t) end
 --- @return any #Flattened copy of the given list-like table.
 function vim.tbl_flatten(t) end
 
+-- Index into a table (first argument) via string keys passed as
+-- subsequent arguments. Return `nil` if the key does not exist. Examples: >
+--
+--   vim.tbl_get({ key = { nested_key = true }}, 'key', 'nested_key') == true
+--   vim.tbl_get({ key = {}}, 'key', 'nested_key') == nil
+--
+-- <
+--- @param o any #Table to index
+--- @vararg any #Optional strings (0 or more, variadic) via which to
+---            index the table
+--- @return any #nested value indexed by key if it exists, else nil
+function vim.tbl_get(o, ...) end
+
 -- Checks if a table is empty.
 --- @param t any #Table to check
 function vim.tbl_isempty(t) end
 
 -- Tests if a Lua table can be treated as an array.
 --- @param t any #Table
---- @return any #`true` if array-like table, else `false` .
+--- @return any #`true` if array-like table, else `false`.
 function vim.tbl_islist(t) end
 
 -- Return a list of all keys used in a table. However, the order

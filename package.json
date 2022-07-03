@@ -21,7 +21,8 @@
     "watch": "node esbuild.js --watch",
     "build": "node esbuild.js",
     "prepare": "node esbuild.js",
-    "schema": "node ./update-config.js"
+    "schema": "node ./update-config.js",
+    "lua": "./scripts/main.sh"
   },
   "prettier": {
     "singleQuote": true,
