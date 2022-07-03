@@ -9,3 +9,5 @@ esbuild.json
 tsconfig.json
 yarn.lock
 update-config.js
+esbuild.json
+.vim
