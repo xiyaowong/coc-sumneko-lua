@@ -154,13 +154,6 @@ export class Ctx {
         changeConfiguration: true,
       },
       middleware: {
-        provideSignatureHelp: async (doc, pos, ctx, token, next) => {
-          const res = await next(doc, pos, ctx, token);
-          if (!res || !res.signatures.length) return res;
-          // @ts-ignore
-          if (res.activeParameter == undefined) res.activeParameter = res.signatures[0].activeParameter;
-          return res;
-        },
         workspace: {
           configuration: async (params, token, next) => {
             const result = await next(params, token);
