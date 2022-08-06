@@ -146,6 +146,10 @@ End with `!` means override the group setting `diagnostics.groupFileStatus`.
 
 End with `!` means override the group setting `diagnostics.groupSeverity`.
 
+## `Lua.diagnostics.unusedLocalExclude`
+- type: `array`
+- default: ``
+- description:    Do not diagnose `unused-local` when the variable name matches the following pattern.
 ## `Lua.diagnostics.workspaceDelay`
 - type: `integer`
 - default: `3000`
@@ -261,7 +265,11 @@ If you want to load files outside the workspace, you need to set `Lua.workspace.
 ## `Lua.runtime.plugin`
 - type: `string`
 - default: ``
-- description:    Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugin) to learn more.
+- description:    Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugins) to learn more.
+## `Lua.runtime.pluginArgs`
+- type: `array`
+- default: ``
+- description:    Additional arguments for the plugin.
 ## `Lua.runtime.special`
 - type: `object`
 - default: `[object Object]`
@@ -308,12 +316,19 @@ The following example shows that 'include' is treated as' require '.
 ## `Lua.telemetry.enable`
 - type: `boolean,null`
 - default: `null`
-- description:    Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Privacy-Policy).
+- description:    Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Home#privacy).
 
 ## `Lua.type.castNumberToInteger`
 - type: `boolean`
-- default: `false`
+- default: `true`
 - description:    Allowed to assign the `number` type to the `integer` type.
+## `Lua.type.weakNilCheck`
+- type: `boolean`
+- default: `false`
+- description:    When checking the type of union type, ignore the `nil` in it.
+
+When this setting is `false`, the `number|nil` type cannot be assigned to the `number` type. It can be with `true`.
+
 ## `Lua.type.weakUnionCheck`
 - type: `boolean`
 - default: `false`
