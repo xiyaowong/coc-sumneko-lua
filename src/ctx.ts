@@ -207,7 +207,6 @@ export class Ctx {
     // activate components
     this.activateCommand();
     this.activateStatusBar();
-    this.activateInlayHints();
   }
 
   activateStatusBar() {
