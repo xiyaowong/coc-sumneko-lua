@@ -15,9 +15,7 @@ You can also custom the server path([`sumneko-lua.serverDir`](https://github.com
 
   ![nvim-lua-dev](https://user-images.githubusercontent.com/47070852/133085674-2310670d-6129-4aac-86ea-0e475bf09b25.gif)
 
-- Inlay-hints(check settings `sumneko-lua.inlayHints.*`, `Lua.hint.*`). Highlights: `CocLuaTypeHint`, `CocLuaParamHint`
-
-  ![inlay-hint](https://user-images.githubusercontent.com/47070852/154476119-ce01b090-6ae4-42dd-887a-52d14fd5d037.png)
+- Inlay-hints provided by coc.nvim.
 
 ## Install
 
