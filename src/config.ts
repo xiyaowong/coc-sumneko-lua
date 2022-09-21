@@ -36,17 +36,4 @@ export class Config {
   get serverDir() {
     return this.cfg.get<string>('serverDir');
   }
-
-  get inlayHints() {
-    const hasVirtualText = workspace.isNvim && workspace.nvim.hasFunction('nvim_buf_set_virtual_text');
-    const { cfg } = this;
-    return {
-      enable: hasVirtualText && workspace.getConfiguration('Lua.hint').get<boolean>('enable', false),
-      typeHintsPrefix: cfg.get<string>('inlayHints.typeHintsPrefix', '« '),
-      paramHintsPrefix: cfg.get<string>('inlayHints.paramHintsPrefix', '» '),
-      // TODO: remove trimSemicolon, as it's supported by the server. Lua.hint.semicolon
-      trimSemicolon: cfg.get<boolean>('inlayHints.trimSemicolon', true),
-      refreshOnInsertMode: hasVirtualText && cfg.get<boolean>('inlayHints.refreshOnInsertMode', false),
-    };
-  }
 }

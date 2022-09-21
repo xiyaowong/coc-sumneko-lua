@@ -19,7 +19,6 @@ import versionCompare from 'node-version-compare';
 import path from 'path';
 import { Config } from './config';
 import { downloadServer, getLatestRelease } from './downloader';
-import { InlayHintsController } from './inlay_hints';
 
 export type LuaDocument = TextDocument & { languageId: 'lua' };
 export function isLuaDocument(document: TextDocument): document is LuaDocument {
@@ -207,7 +206,6 @@ export class Ctx {
     // activate components
     this.activateCommand();
     this.activateStatusBar();
-    this.activateInlayHints();
   }
 
   activateStatusBar() {
@@ -275,14 +273,5 @@ export class Ctx {
         }
       }
     });
-  }
-
-  async activateInlayHints() {
-    await workspace.nvim.command('hi default link CocLuaTypeHint  CocCodeLens');
-    await workspace.nvim.command('hi default link CocLuaParamHint CocCodeLens');
-
-    const inlayHintsController = new InlayHintsController(this);
-    this.extCtx.subscriptions.push(inlayHintsController);
-    inlayHintsController.activate();
   }
 }

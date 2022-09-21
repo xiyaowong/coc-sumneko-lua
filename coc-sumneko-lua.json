@@ -35,25 +35,5 @@
     "type": "string",
     "default": null,
     "description": "The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default"
-  },
-  "sumneko-lua.inlayHints.typeHintsPrefix": {
-    "type": "string",
-    "default": "« ",
-    "description": "Prefix for type hints"
-  },
-  "sumneko-lua.inlayHints.paramHintsPrefix": {
-    "type": "string",
-    "default": "» ",
-    "description": "Prefix for parameter hints"
-  },
-  "sumneko-lua.inlayHints.trimSemicolon": {
-    "type": "boolean",
-    "default": true,
-    "description": "Trim Semicolon"
-  },
-  "sumneko-lua.inlayHints.refreshOnInsertMode": {
-    "type": "boolean",
-    "default": false,
-    "description": "Whether to refresh inlayHints on insert mode"
   }
 }
