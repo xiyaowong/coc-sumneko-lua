@@ -320,6 +320,10 @@ When this setting is `false`, the `number|nil` type cannot be assigned to the `n
 
 When this setting is `false`, the `number|boolean` type cannot be assigned to the `number` type. It can be with `true`.
 
+## `Lua.typeFormat.config`
+- type: `object`
+- default: `undefined`
+- description:    %config.typeFormat.config%
 ## `Lua.window.progressBar`
 - type: `boolean`
 - default: `true`
