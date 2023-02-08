@@ -15,6 +15,9 @@ const overrids = {
     default: [],
     markdownDescription: 'Additional command line parameters when starting the language service.',
   },
+  'Lua.misc.executablePath': {
+    markdownDescription: 'Specify the executable path.',
+  },
 };
 
 async function main() {

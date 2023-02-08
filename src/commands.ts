@@ -11,7 +11,7 @@ export function install(ctx: Ctx): Cmd {
       await ctx.client.stop();
       ctx.client.start();
     } else {
-      window.showMessage('May be you should restart the server');
+      window.showInformationMessage('May be you should restart the server');
     }
   };
 }
@@ -19,13 +19,13 @@ export function install(ctx: Ctx): Cmd {
 export function version(ctx: Ctx): Cmd {
   return async () => {
     const v = (await ctx.getCurrentVersion()) || 'unknown version';
-    window.showMessage(v);
+    window.showInformationMessage(v);
   };
 }
 
 export function showTooltip(ctx: Ctx): Cmd {
   return async () => {
-    window.showNotification({ content: ctx.barTooltip, timeout: 5000 });
+    window.showNotification({ content: ctx.barTooltip });
   };
 }
 

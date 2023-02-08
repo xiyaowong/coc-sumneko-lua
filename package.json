@@ -104,6 +104,12 @@
           "default": null,
           "description": "The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default"
         },
+        "Lua.codeLens.enable": {
+          "default": false,
+          "markdownDescription": "Enable code lens.",
+          "scope": "resource",
+          "type": "boolean"
+        },
         "Lua.completion.autoRequire": {
           "default": true,
           "markdownDescription": "When the input looks like a file name, automatically `require` this file.",
@@ -234,6 +240,7 @@
               "exp-in-action",
               "global-in-nil-env",
               "index-in-func-name",
+              "invisible",
               "jump-local-scope",
               "keyword",
               "local-limit",
@@ -257,6 +264,7 @@
               "luadoc-miss-operator-name",
               "luadoc-miss-param-extends",
               "luadoc-miss-param-name",
+              "luadoc-miss-see-name",
               "luadoc-miss-sign-name",
               "luadoc-miss-symbol",
               "luadoc-miss-type-name",
@@ -280,6 +288,7 @@
               "missing-return-value",
               "need-check-nil",
               "need-paren",
+              "nesting-long-mark",
               "newfield-call",
               "newline-call",
               "no-unknown",
@@ -435,7 +444,7 @@
             },
             "strict": {
               "default": "Fallback",
-              "description": "* close-non-object\n* deprecated\n* discard-returns",
+              "description": "* close-non-object\n* deprecated\n* discard-returns\n* invisible",
               "enum": [
                 "Any",
                 "Opened",
@@ -583,7 +592,7 @@
             },
             "strict": {
               "default": "Fallback",
-              "description": "* close-non-object\n* deprecated\n* discard-returns",
+              "description": "* close-non-object\n* deprecated\n* discard-returns\n* invisible",
               "enum": [
                 "Error",
                 "Warning",
@@ -749,7 +758,7 @@
             },
             "circle-doc-class": {
               "default": "Any",
-              "description": "%config.diagnostics.circle-doc-class%",
+              "description": "",
               "enum": [
                 "Any",
                 "Opened",
@@ -917,7 +926,7 @@
               "type": "string"
             },
             "duplicate-set-field": {
-              "default": "Any",
+              "default": "Opened",
               "description": "Enable diagnostics for setting the same field in a class more than once.",
               "enum": [
                 "Any",
@@ -945,6 +954,19 @@
             "global-in-nil-env": {
               "default": "Any",
               "description": "Enable cannot use global variables （ `_ENV` is set to `nil`） diagnostics.",
+              "enum": [
+                "Any",
+                "Opened",
+                "None",
+                "Any!",
+                "Opened!",
+                "None!"
+              ],
+              "type": "string"
+            },
+            "invisible": {
+              "default": "Any",
+              "description": "Enable diagnostics for accesses to fields which are invisible.",
               "enum": [
                 "Any",
                 "Opened",
@@ -1470,7 +1492,7 @@
             },
             "circle-doc-class": {
               "default": "Warning",
-              "description": "%config.diagnostics.circle-doc-class%",
+              "description": "",
               "enum": [
                 "Error",
                 "Warning",
@@ -1696,6 +1718,21 @@
             "global-in-nil-env": {
               "default": "Warning",
               "description": "Enable cannot use global variables （ `_ENV` is set to `nil`） diagnostics.",
+              "enum": [
+                "Error",
+                "Warning",
+                "Information",
+                "Hint",
+                "Error!",
+                "Warning!",
+                "Information!",
+                "Hint!"
+              ],
+              "type": "string"
+            },
+            "invisible": {
+              "default": "Warning",
+              "description": "Enable diagnostics for accesses to fields which are invisible.",
               "enum": [
                 "Error",
                 "Warning",
@@ -2219,9 +2256,25 @@
         },
         "Lua.diagnostics.workspaceDelay": {
           "default": 3000,
-          "markdownDescription": "Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics.",
+          "markdownDescription": "Latency (milliseconds) for workspace diagnostics.",
           "scope": "resource",
           "type": "integer"
+        },
+        "Lua.diagnostics.workspaceEvent": {
+          "default": "OnSave",
+          "enum": [
+            "OnChange",
+            "OnSave",
+            "None"
+          ],
+          "markdownDescription": "Set the time to trigger workspace diagnostics.",
+          "markdownEnumDescriptions": [
+            "Trigger workspace diagnostics when the file is changed.",
+            "Trigger workspace diagnostics when the file is saved.",
+            "Disable workspace diagnostics."
+          ],
+          "scope": "resource",
+          "type": "string"
         },
         "Lua.diagnostics.workspaceRate": {
           "default": 100,
@@ -2229,9 +2282,36 @@
           "scope": "resource",
           "type": "integer"
         },
+        "Lua.doc.packageName": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Treat specific field names as package, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are package, witch can only be accessed in the file where the definition is located.",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.doc.privateName": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Treat specific field names as private, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are private, witch can only be accessed in the class where the definition is located.",
+          "scope": "resource",
+          "type": "array"
+        },
+        "Lua.doc.protectedName": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.",
+          "scope": "resource",
+          "type": "array"
+        },
         "Lua.format.defaultConfig": {
           "additionalProperties": false,
-          "default": {},
+          "default": [],
           "markdownDescription": "The default format configuration. Has a lower priority than `.editorconfig` file in the workspace.\nRead [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/docs) to learn usage.\n",
           "patternProperties": {
             ".*": {
@@ -2363,6 +2443,12 @@
           "scope": "resource",
           "type": "integer"
         },
+        "Lua.misc.executablePath": {
+          "default": "",
+          "markdownDescription": "Specify the executable path in VSCode.",
+          "scope": "resource",
+          "type": "string"
+        },
         "Lua.misc.parameters": {
           "default": [],
           "items": {
@@ -2378,7 +2464,7 @@
           "properties": {
             "basic": {
               "default": "default",
-              "description": "%config.runtime.builtin.basic%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2388,7 +2474,7 @@
             },
             "bit": {
               "default": "default",
-              "description": "%config.runtime.builtin.bit%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2398,7 +2484,7 @@
             },
             "bit32": {
               "default": "default",
-              "description": "%config.runtime.builtin.bit32%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2408,7 +2494,7 @@
             },
             "builtin": {
               "default": "default",
-              "description": "%config.runtime.builtin.builtin%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2418,7 +2504,7 @@
             },
             "coroutine": {
               "default": "default",
-              "description": "%config.runtime.builtin.coroutine%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2428,7 +2514,7 @@
             },
             "debug": {
               "default": "default",
-              "description": "%config.runtime.builtin.debug%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2438,7 +2524,7 @@
             },
             "ffi": {
               "default": "default",
-              "description": "%config.runtime.builtin.ffi%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2448,7 +2534,7 @@
             },
             "io": {
               "default": "default",
-              "description": "%config.runtime.builtin.io%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2458,7 +2544,7 @@
             },
             "jit": {
               "default": "default",
-              "description": "%config.runtime.builtin.jit%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2468,7 +2554,7 @@
             },
             "math": {
               "default": "default",
-              "description": "%config.runtime.builtin.math%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2478,7 +2564,7 @@
             },
             "os": {
               "default": "default",
-              "description": "%config.runtime.builtin.os%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2488,7 +2574,7 @@
             },
             "package": {
               "default": "default",
-              "description": "%config.runtime.builtin.package%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2498,7 +2584,7 @@
             },
             "string": {
               "default": "default",
-              "description": "%config.runtime.builtin.string%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2508,7 +2594,7 @@
             },
             "string.buffer": {
               "default": "default",
-              "description": "%config.runtime.builtin.string.buffer%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2518,7 +2604,7 @@
             },
             "table": {
               "default": "default",
-              "description": "%config.runtime.builtin.table%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2528,7 +2614,7 @@
             },
             "table.clear": {
               "default": "default",
-              "description": "%config.runtime.builtin.table.clear%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2538,7 +2624,7 @@
             },
             "table.new": {
               "default": "default",
-              "description": "%config.runtime.builtin.table.new%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2548,7 +2634,7 @@
             },
             "utf8": {
               "default": "default",
-              "description": "%config.runtime.builtin.utf8%",
+              "description": "",
               "enum": [
                 "default",
                 "enable",
@@ -2571,10 +2657,10 @@
           ],
           "markdownDescription": "File encoding. The `ansi` option is only available under the `Windows` platform.",
           "markdownEnumDescriptions": [
-            "%config.runtime.fileEncoding.utf8%",
-            "%config.runtime.fileEncoding.ansi%",
-            "%config.runtime.fileEncoding.utf16le%",
-            "%config.runtime.fileEncoding.utf16be%"
+            "",
+            "",
+            "",
+            ""
           ],
           "scope": "resource",
           "type": "string"
@@ -2635,7 +2721,7 @@
         },
         "Lua.runtime.plugin": {
           "default": "",
-          "markdownDescription": "Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugins) to learn more.",
+          "markdownDescription": "Plugin path. Please read [wiki](https://github.com/LuaLS/lua-language-server/wiki/Plugins) to learn more.",
           "scope": "resource",
           "type": "string"
         },
@@ -2650,7 +2736,7 @@
         },
         "Lua.runtime.special": {
           "additionalProperties": false,
-          "default": {},
+          "default": [],
           "markdownDescription": "The custom global variables are regarded as some special built-in variables, and the language server will provide special support\nThe following example shows that 'include' is treated as' require '.\n```json\n\"Lua.runtime.special\" : {\n    \"include\" : \"require\"\n}\n```\n",
           "patternProperties": {
             ".*": {
@@ -2693,11 +2779,11 @@
           ],
           "markdownDescription": "Lua runtime version.",
           "markdownEnumDescriptions": [
-            "%config.runtime.version.Lua 5.1%",
-            "%config.runtime.version.Lua 5.2%",
-            "%config.runtime.version.Lua 5.3%",
-            "%config.runtime.version.Lua 5.4%",
-            "%config.runtime.version.LuaJIT%"
+            "",
+            "",
+            "",
+            "",
+            ""
           ],
           "scope": "resource",
           "type": "string"
@@ -2741,18 +2827,6 @@
           "scope": "resource",
           "type": "array"
         },
-        "Lua.telemetry.enable": {
-          "default": null,
-          "markdownDescription": "Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Home#privacy).\n",
-          "scope": "resource",
-          "tags": [
-            "telemetry"
-          ],
-          "type": [
-            "boolean",
-            "null"
-          ]
-        },
         "Lua.type.castNumberToInteger": {
           "default": true,
           "markdownDescription": "Allowed to assign the `number` type to the `integer` type.",
@@ -2773,21 +2847,21 @@
         },
         "Lua.typeFormat.config": {
           "additionalProperties": false,
-          "markdownDescription": "%config.typeFormat.config%",
+          "markdownDescription": "Configures the formatting behavior while typing Lua code.",
           "properties": {
             "auto_complete_end": {
               "default": "true",
-              "description": "%config.typeFormat.config.auto_complete_end%",
+              "description": "Controls if `end` is automatically completed at suitable positions.",
               "type": "string"
             },
             "auto_complete_table_sep": {
               "default": "true",
-              "description": "%config.typeFormat.config.auto_complete_table_sep%",
+              "description": "Controls if a separator is automatically appended at the end of a table declaration.",
               "type": "string"
             },
             "format_line": {
               "default": "true",
-              "description": "%config.typeFormat.config.format_line%",
+              "description": "Controls if a line is formatted at all.",
               "type": "string"
             }
           },
@@ -2851,19 +2925,6 @@
           "scope": "resource",
           "type": "integer"
         },
-        "Lua.workspace.supportScheme": {
-          "default": [
-            "file",
-            "untitled",
-            "git"
-          ],
-          "items": {
-            "type": "string"
-          },
-          "markdownDescription": "Provide language server for the Lua files of the following scheme.",
-          "scope": "resource",
-          "type": "array"
-        },
         "Lua.workspace.useGitIgnore": {
           "default": true,
           "markdownDescription": "Ignore files list in `.gitignore` .",
@@ -2875,7 +2936,7 @@
           "items": {
             "type": "string"
           },
-          "markdownDescription": "Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/sumneko/lua-language-server/tree/master/meta/3rd)",
+          "markdownDescription": "Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/LuaLS/lua-language-server/tree/master/meta/3rd)",
           "scope": "resource",
           "type": "array"
         }

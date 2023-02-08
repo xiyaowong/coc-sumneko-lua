@@ -6,7 +6,6 @@ import {
   ExtensionContext,
   LanguageClient,
   LanguageClientOptions,
-  languages,
   ServerOptions,
   services,
   TextDocument,
@@ -47,6 +46,7 @@ export class Ctx {
   }
 
   resolveBin(): [string, string[]] | undefined {
+    // TODO: handle Lua.misc.executablePath
     const serverDir = this.config.serverDir
       ? this.config.serverDir
       : path.join(this.extCtx.storagePath, 'sumneko-lua-ls', 'extension', 'server');
@@ -58,7 +58,7 @@ export class Ctx {
     }
 
     if (!executable.sync(bin)) {
-      window.showMessage(`${bin} is not executable`, 'error');
+      window.showInformationMessage(`${bin} is not executable`, 'error');
       return;
     }
 
@@ -126,15 +126,15 @@ export class Ctx {
           await downloadServer(this.extCtx, latest);
         } catch (e) {
           console.error(e);
-          window.showMessage('Upgrade server failed', 'error');
+          window.showInformationMessage('Upgrade server failed', 'error');
           return;
         }
         this.client.start();
       } else {
-        window.showMessage(`You can run ':CocCommand sumneko-lua.install' to upgrade server manually`);
+        window.showInformationMessage(`You can run ':CocCommand sumneko-lua.install' to upgrade server manually`);
       }
     } else {
-      window.showMessage(`${msg} Run :CocCommand sumneko-lua.install to upgrade`);
+      window.showInformationMessage(`${msg} Run :CocCommand sumneko-lua.install to upgrade`);
     }
   }
 

@@ -31,6 +31,10 @@
 - type: `string`
 - default: `null`
 - description:    The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default
+## `Lua.codeLens.enable`
+- type: `boolean`
+- default: `false`
+- description:    Enable code lens.
 ## `Lua.completion.autoRequire`
 - type: `boolean`
 - default: `true`
@@ -137,14 +141,30 @@ End with `!` means override the group setting `diagnostics.groupSeverity`.
 ## `Lua.diagnostics.workspaceDelay`
 - type: `integer`
 - default: `3000`
-- description:    Latency (milliseconds) for workspace diagnostics. When you start the workspace, or edit any file, the entire workspace will be re-diagnosed in the background. Set to negative to disable workspace diagnostics.
+- description:    Latency (milliseconds) for workspace diagnostics.
+## `Lua.diagnostics.workspaceEvent`
+- type: `string`
+- default: `OnSave`
+- description:    Set the time to trigger workspace diagnostics.
 ## `Lua.diagnostics.workspaceRate`
 - type: `integer`
 - default: `100`
 - description:    Workspace diagnostics run rate (%). Decreasing this value reduces CPU usage, but also reduces the speed of workspace diagnostics. The diagnosis of the file you are currently editing is always done at full speed and is not affected by this setting.
+## `Lua.doc.packageName`
+- type: `array`
+- default: ``
+- description:    Treat specific field names as package, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are package, witch can only be accessed in the file where the definition is located.
+## `Lua.doc.privateName`
+- type: `array`
+- default: ``
+- description:    Treat specific field names as private, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are private, witch can only be accessed in the class where the definition is located.
+## `Lua.doc.protectedName`
+- type: `array`
+- default: ``
+- description:    Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.
 ## `Lua.format.defaultConfig`
 - type: `object`
-- default: `[object Object]`
+- default: ``
 - description:    The default format configuration. Has a lower priority than `.editorconfig` file in the workspace.
 Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/docs) to learn usage.
 
@@ -209,6 +229,10 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 - type: `integer`
 - default: `1000`
 - description:    The maximum length of a hover to view the contents of a string.
+## `Lua.misc.executablePath`
+- type: `string`
+- default: ``
+- description:    Specify the executable path in VSCode.
 ## `Lua.misc.parameters`
 - type: `array`
 - default: ``
@@ -249,14 +273,14 @@ If you want to load files outside the workspace, you need to set `Lua.workspace.
 ## `Lua.runtime.plugin`
 - type: `string`
 - default: ``
-- description:    Plugin path. Please read [wiki](https://github.com/sumneko/lua-language-server/wiki/Plugins) to learn more.
+- description:    Plugin path. Please read [wiki](https://github.com/LuaLS/lua-language-server/wiki/Plugins) to learn more.
 ## `Lua.runtime.pluginArgs`
 - type: `array`
 - default: ``
 - description:    Additional arguments for the plugin.
 ## `Lua.runtime.special`
 - type: `object`
-- default: `[object Object]`
+- default: ``
 - description:    The custom global variables are regarded as some special built-in variables, and the language server will provide special support
 The following example shows that 'include' is treated as' require '.
 ```json
@@ -297,11 +321,6 @@ The following example shows that 'include' is treated as' require '.
 - type: `array`
 - default: ``
 - description:    Custom words for spell checking.
-## `Lua.telemetry.enable`
-- type: `boolean,null`
-- default: `null`
-- description:    Enable telemetry to send your editor information and error logs over the network. Read our privacy policy [here](https://github.com/sumneko/lua-language-server/wiki/Home#privacy).
-
 ## `Lua.type.castNumberToInteger`
 - type: `boolean`
 - default: `true`
@@ -323,7 +342,7 @@ When this setting is `false`, the `number|boolean` type cannot be assigned to th
 ## `Lua.typeFormat.config`
 - type: `object`
 - default: `undefined`
-- description:    %config.typeFormat.config%
+- description:    Configures the formatting behavior while typing Lua code.
 ## `Lua.window.progressBar`
 - type: `boolean`
 - default: `true`
@@ -364,10 +383,6 @@ When this setting is `false`, the `number|boolean` type cannot be assigned to th
 - type: `integer`
 - default: `500`
 - description:    Skip files larger than this value (KB) when preloading.
-## `Lua.workspace.supportScheme`
-- type: `array`
-- default: `file,untitled,git`
-- description:    Provide language server for the Lua files of the following scheme.
 ## `Lua.workspace.useGitIgnore`
 - type: `boolean`
 - default: `true`
@@ -375,4 +390,4 @@ When this setting is `false`, the `number|boolean` type cannot be assigned to th
 ## `Lua.workspace.userThirdParty`
 - type: `array`
 - default: ``
-- description:    Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/sumneko/lua-language-server/tree/master/meta/3rd)
+- description:    Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/LuaLS/lua-language-server/tree/master/meta/3rd)
