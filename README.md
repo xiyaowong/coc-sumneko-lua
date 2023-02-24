@@ -11,7 +11,7 @@ You can also custom the server path([`sumneko-lua.serverDir`](https://github.com
 
   ![base](https://user-images.githubusercontent.com/47070852/133086083-a5357ca3-ada6-46d9-953f-f86026c137e4.png)
 
-- Nvim lua development(check setting `sumneko-lua.enableNvimLuaDev`). Credit: [folke/lua-dev.nvim](https://github.com/folke/lua-dev.nvim)
+- Nvim lua development(check setting `sumneko-lua.enableNvimLuaDev`). Credit: [folke/neodev.nvim](https://github.com/folke/neodev.nvim)
 
   ![nvim-lua-dev](https://user-images.githubusercontent.com/47070852/133085674-2310670d-6129-4aac-86ea-0e475bf09b25.gif)
 
@@ -25,14 +25,15 @@ You can also custom the server path([`sumneko-lua.serverDir`](https://github.com
 
 ## Commands
 
-| Command                                  | Description                                         |
-| ---------------------------------------- | --------------------------------------------------- |
-| `sumneko-lua.install`                    | Install or update sumneko lua-language-server       |
-| `sumneko-lua.restart`                    | Restart server                                      |
-| `sumneko-lua.version`                    | Echo server version                                 |
-| `sumneko-lua.checkUpdate`                | Check update                                        |
-| `sumneko-lua.showTooltip`                | Show tooltips                                       |
-| `sumneko-lua.insertNvimLuaPluginLibrary` | Insert nvim lua plugin to current workspace library |
+| Command                                  | Description                                                                    |
+| ---------------------------------------- | ------------------------------------------------------------------------------ |
+| `sumneko-lua.install`                    | Install or update sumneko lua-language-server                                  |
+| `sumneko-lua.restart`                    | Restart server                                                                 |
+| `sumneko-lua.version`                    | Echo server version                                                            |
+| `sumneko-lua.checkUpdate`                | Check update                                                                   |
+| `sumneko-lua.showTooltip`                | Show tooltips                                                                  |
+| `sumneko-lua.insertNvimLuaPluginLibrary` | Insert nvim lua plugin to current workspace library                            |
+| `sumneko-lua.downloadNvimLuaTypes`       | **Download/Update** nvim lua types(Clone https://github.com/folke/neodev.nvim) |
 
 ## Credit
 

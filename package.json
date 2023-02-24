@@ -21,8 +21,7 @@
     "watch": "node esbuild.js --watch",
     "build": "node esbuild.js",
     "prepare": "node esbuild.js",
-    "schema": "node ./update-config.js",
-    "lua": "./scripts/main.sh"
+    "schema": "node ./update-config.js"
   },
   "prettier": {
     "singleQuote": true,
@@ -2971,6 +2970,11 @@
       {
         "command": "sumneko-lua.insertNvimLuaPluginLibrary",
         "title": "Insert nvim lua plugin to current workspace library",
+        "category": "Sumneko lua-language-server"
+      },
+      {
+        "command": "sumneko-lua.downloadNvimLuaTypes",
+        "title": "Download/Update nvim lua types(Clone https://github.com/folke/neodev.nvim)",
         "category": "Sumneko lua-language-server"
       }
     ]

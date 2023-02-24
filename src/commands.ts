@@ -68,3 +68,9 @@ export function insertNvimLuaPluginLibrary(_: Ctx): Cmd {
     }
   };
 }
+
+export function downloadNvimLuaTypes(ctx: Ctx): Cmd {
+  return async () => {
+    await ctx.neodev.downloadTypes();
+  };
+}

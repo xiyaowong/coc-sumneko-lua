@@ -18,6 +18,7 @@ import versionCompare from 'node-version-compare';
 import path from 'path';
 import { Config } from './config';
 import { downloadServer, getLatestRelease } from './downloader';
+import { Neodev } from './neodev';
 
 export type LuaDocument = TextDocument & { languageId: 'lua' };
 export function isLuaDocument(document: TextDocument): document is LuaDocument {
@@ -31,8 +32,11 @@ export class Ctx {
   client!: LanguageClient;
   public readonly config = new Config();
   barTooltip = '';
+  neodev!: Neodev;
 
-  constructor(public readonly extCtx: ExtensionContext) {}
+  constructor(public readonly extCtx: ExtensionContext) {
+    this.neodev = new Neodev(extCtx);
+  }
 
   registerCommand(name: string, factory: (ctx: Ctx) => Cmd, internal = false) {
     const fullName = `sumneko-lua.${name}`;
@@ -179,9 +183,9 @@ export class Ctx {
             if (!library.includes(runtime)) {
               library.push(runtime);
             }
-            const types = `${path.dirname(path.dirname(__filename))}/nvim_lua_types`;
-            console.log(types);
-            if (!library.includes(types)) {
+
+            const types = await this.neodev.getTypesPath();
+            if (types && !library.includes(types)) {
               library.push(types);
             }
 

@@ -66,6 +66,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   ctx.registerCommand('showTooltip', cmds.showTooltip);
   ctx.registerCommand('insertNvimLuaPluginLibrary', cmds.insertNvimLuaPluginLibrary);
   ctx.registerCommand('checkUpdate', () => async () => await ctx.checkUpdate());
+  ctx.registerCommand('downloadNvimLuaTypes', cmds.downloadNvimLuaTypes);
 
   await ctx.startServer();
   if (ctx.config.checkUpdate) {
