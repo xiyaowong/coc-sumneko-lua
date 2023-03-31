@@ -256,9 +256,12 @@ export class Ctx {
       }
       const propMap: Map<string, Map<string, any>> = new Map();
       for (const data of params.data) {
-        const config = workspace.getConfiguration(undefined, data.uri);
+        const folder = workspace.getWorkspaceFolder(data.uri);
+        const config = workspace.getConfiguration(undefined, folder ? data.uri : undefined);
         if (data.action == 'add') {
-          const value: any[] = config.get(data.key, []);
+          let value = config.get<any[]>(data.key, []);
+          // weird...
+          value = Array.from(value);
           value.push(data.value);
           config.update(data.key, value, data.global);
           continue;
