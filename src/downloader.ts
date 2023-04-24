@@ -50,7 +50,8 @@ export async function getLatestRelease(): Promise<Release | undefined> {
     return;
   }
 
-  const targetPlatform = `${os.platform()}-${os.arch()}`;
+  const osPlatform = ['linux', 'darwin', 'win32'].includes(os.platform()) ? os.platform() : 'linux';
+  const targetPlatform = `${osPlatform}-${os.arch()}`;
 
   const release = await response.json();
 
