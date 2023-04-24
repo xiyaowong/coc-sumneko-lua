@@ -1,6 +1,6 @@
-import {ExtensionContext, window} from 'coc.nvim';
+import { ExtensionContext, window } from 'coc.nvim';
 import extract from 'extract-zip';
-import fetch, {Response} from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 import path from 'path';
 import * as fs from 'fs-extra';
 import * as os from 'os';
@@ -50,9 +50,7 @@ export async function getLatestRelease(): Promise<Release | undefined> {
     return;
   }
 
-  const osPlatform = ['linux', 'darwin', 'win32'].includes(os.platform())
-    ? os.platform()
-    : 'linux';
+  const osPlatform = ['linux', 'darwin', 'win32'].includes(os.platform()) ? os.platform() : 'linux';
   const targetPlatform = `${osPlatform}-${os.arch()}`;
 
   const release = await response.json();
@@ -66,7 +64,7 @@ export async function getLatestRelease(): Promise<Release | undefined> {
 }
 
 export async function downloadServer(context: ExtensionContext, release?: Release): Promise<void> {
-  const statusItem = window.createStatusBarItem(0, {progress: true});
+  const statusItem = window.createStatusBarItem(0, { progress: true });
   statusItem.show();
 
   if (!release) {
@@ -104,7 +102,7 @@ export async function downloadServer(context: ExtensionContext, release?: Releas
   await fs.remove(targetPath);
 
   statusItem.text = `Extracting to ${targetPath}`;
-  await extract(extTempFile, {dir: targetPath});
+  await extract(extTempFile, { dir: targetPath });
 
   const binPath = path.join(targetPath, 'extension', 'server', 'bin', 'lua-language-server');
   if (fs.existsSync(binPath)) {
