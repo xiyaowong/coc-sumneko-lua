@@ -23,6 +23,8 @@ You can also custom the server path([`sumneko-lua.serverDir`](https://github.com
 
 ## [Settings (Click me)](settings.md)
 
+## [Config Examples for Distributions (Currently only NixOS)](examples-for-distributions.md)
+
 ## Commands
 
 | Command                                  | Description                                                                    |
