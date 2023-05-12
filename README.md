@@ -21,7 +21,9 @@ You can also custom the server path([`sumneko-lua.serverDir`](https://github.com
 
 `:CocInstall coc-sumneko-lua`
 
-## [Settings(Click me)](https://github.com/xiyaowong/coc-sumneko-lua/blob/main/settings.md)
+## [Settings (Click me)](settings.md)
+
+## [Config Examples for Distributions (Currently only NixOS)](examples-for-distributions.md)
 
 ## Commands
 
