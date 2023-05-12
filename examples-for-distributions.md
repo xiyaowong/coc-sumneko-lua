@@ -20,7 +20,7 @@ Here's an minimal working example:
 }
 ```
 
-`${pkgs.lua-language-server}` needs to be replaced by real path of `lua-language-server`.
+`${pkgs.lua-language-server}` needs to be replaced by real path of `lua-language-server`. And `lua-language-server` used to be called `sumneko-lua-language-server` in `nixpkgs`, maybe you need to use old name.
 
 If you don't want to generate your coc configuration by nix and don't want to change the absolute path of `lua-language-server` every time updating your `nixpkgs`, you can link `lua-language-server` to somewhere fixed and change last line of configuration to the link target.
 
