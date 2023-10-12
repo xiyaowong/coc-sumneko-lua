@@ -53,7 +53,7 @@ async function main() {
   Object.keys(config).forEach((key) => {
     let v = config[key];
     settingsFileStream.write(
-      `## \`${key}\`\n- type: \`${v.type}\`\n- default: \`${v.default}\`\n- description:    ${
+      `## \`${key}\`\n- type: \`${v.type}\`\n- default: \`${JSON.stringify(v.default)}\`\n- description:    ${
         v.description ? v.description : v.markdownDescription
       }\n`
     );
