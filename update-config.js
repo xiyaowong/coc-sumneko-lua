@@ -21,7 +21,7 @@ const overrids = {
 };
 
 async function main() {
-  let resp = await fetch('https://cdn.jsdelivr.net/gh/sumneko/vscode-lua@master/setting/schema.json');
+  let resp = await fetch('https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json');
   let schema = await resp.json();
   let properties = schema.properties;
 

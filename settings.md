@@ -31,6 +31,10 @@
 - type: `string`
 - default: `null`
 - description:    The server directory which contains: bin/, changelog.md, debugger.lua, locale/, main.lua, meta/, script/. Download and set by default
+## `Lua.addonManager.enable`
+- type: `boolean`
+- default: `true`
+- description:    Whether the addon manager is enabled or not.
 ## `Lua.codeLens.enable`
 - type: `boolean`
 - default: `false`
@@ -164,7 +168,7 @@ End with `!` means override the group setting `diagnostics.groupSeverity`.
 - description:    Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.
 ## `Lua.format.defaultConfig`
 - type: `object`
-- default: ``
+- default: `[object Object]`
 - description:    The default format configuration. Has a lower priority than `.editorconfig` file in the workspace.
 Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/docs) to learn usage.
 
@@ -232,11 +236,15 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 ## `Lua.misc.executablePath`
 - type: `string`
 - default: ``
-- description:    Specify the executable path in VSCode.
+- description:    Specify the executable path.
 ## `Lua.misc.parameters`
 - type: `array`
 - default: ``
 - description:    Additional command line parameters when starting the language service.
+## `Lua.nameStyle.config`
+- type: `object`
+- default: `[object Object]`
+- description:    Set name style config
 ## `Lua.runtime.builtin`
 - type: `object`
 - default: `undefined`
@@ -273,14 +281,14 @@ If you want to load files outside the workspace, you need to set `Lua.workspace.
 ## `Lua.runtime.plugin`
 - type: `string`
 - default: ``
-- description:    Plugin path. Please read [wiki](https://github.com/LuaLS/lua-language-server/wiki/Plugins) to learn more.
+- description:    Plugin path. Please read [wiki](https://luals.github.io/wiki/plugins) to learn more.
 ## `Lua.runtime.pluginArgs`
 - type: `array`
 - default: ``
 - description:    Additional arguments for the plugin.
 ## `Lua.runtime.special`
 - type: `object`
-- default: ``
+- default: `[object Object]`
 - description:    The custom global variables are regarded as some special built-in variables, and the language server will provide special support
 The following example shows that 'include' is treated as' require '.
 ```json
