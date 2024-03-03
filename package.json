@@ -29,7 +29,7 @@
     "semi": true
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.12",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^16.0.1",
     "@types/node-fetch": "^2.5.11",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
@@ -41,7 +41,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "executable": "^4.1.1",
     "extract-zip": "^2.0.1",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^11.2.0",
     "node-fetch": "^2.6.1",
     "node-version-compare": "^1.0.3",
     "prettier": "^2.2.0",
