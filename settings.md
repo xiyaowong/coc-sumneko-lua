@@ -360,8 +360,8 @@ When this setting is `false`, the `number|boolean` type cannot be assigned to th
 - default: `true`
 - description:    Show extension status in status bar.
 ## `Lua.workspace.checkThirdParty`
-- type: `boolean`
-- default: `true`
+- type: `string,boolean`
+- default: `undefined`
 - description:    Automatic detection and adaptation of third-party libraries, currently supported libraries are:
 
 * OpenResty
