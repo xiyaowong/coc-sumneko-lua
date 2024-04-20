@@ -3224,7 +3224,8 @@
     "watch": "node esbuild.mjs --watch",
     "build": "node esbuild.mjs",
     "prepare": "node esbuild.mjs",
-    "schema": "node ./update-config.js"
+    "schema": "node ./update-config.js",
+    "release": "bumpp && npm publish"
   },
   "dependencies": {
     "tslib": "^2.6.2"
@@ -3234,6 +3235,7 @@
     "@types/node": "^16.0.0",
     "@types/node-fetch": "2.6.11",
     "@wongxy/eslint-config": "^0.0.17",
+    "bumpp": "^9.4.0",
     "coc.nvim": "^0.0.83-next.18",
     "esbuild": "0.20.2",
     "eslint": "^8.57.0",
