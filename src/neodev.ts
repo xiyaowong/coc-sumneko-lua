@@ -39,7 +39,7 @@ export class Neodev {
       return path.join(
         this.repoDir,
         'types',
-        workspace.isNvim && Boolean(workspace.nvim.call('luaeval', 'vim.version().prerelease')) ? 'nightly' : 'stable'
+        workspace.isNvim && Boolean(await workspace.nvim.call('luaeval', 'vim.version().prerelease')) ? 'nightly' : 'stable'
       );
     } else {
       window.showWarningMessage('Please run command: installNvimLuaTypes');
