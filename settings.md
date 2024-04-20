@@ -1,4 +1,3 @@
-
 # Get more information
 
 - [schema.json](https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json)

@@ -11,3 +11,6 @@ yarn.lock
 update-config.js
 esbuild.json
 .vim
+eslint.config.js
+package-lock.json
+esbuild.mjs

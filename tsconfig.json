@@ -3,12 +3,12 @@
     "target": "es2017",
     "lib": ["es2017", "es2018"],
     "module": "commonjs",
-    "declaration": false,
-    "sourceMap": true,
-    "outDir": "lib",
-    "strict": true,
     "moduleResolution": "node",
+    "strict": true,
     "noImplicitAny": false,
+    "declaration": false,
+    "outDir": "lib",
+    "sourceMap": true,
     "esModuleInterop": true
   },
   "include": ["src"]

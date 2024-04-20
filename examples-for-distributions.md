@@ -24,7 +24,7 @@ Here's an minimal working example:
 
 If you don't want to generate your coc configuration by nix and don't want to change the absolute path of `lua-language-server` every time updating your `nixpkgs`, you can link `lua-language-server` to somewhere fixed and change last line of configuration to the link target.
 
-For example, add it to `environment.systemPackages` and change 
+For example, add it to `environment.systemPackages` and change
 
 - `configuration.nix`
 
