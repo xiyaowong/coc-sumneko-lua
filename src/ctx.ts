@@ -183,6 +183,14 @@ export class Ctx {
             if (!library.includes(runtime))
               library.push(runtime)
 
+            const runtime_paths = await workspace.nvim.runtimePaths
+            for (const each_path of runtime_paths) {
+                const each_luapath = path.join(each_path, 'lua')
+                if (!library.includes(each_luapath) && fs.existsSync(each_luapath)) {
+                    library.push(each_luapath)
+                }
+            }
+
             const types = await this.neodev.getTypesPath()
             if (types && !library.includes(types))
               library.push(types)
