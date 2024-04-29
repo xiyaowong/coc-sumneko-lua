@@ -3234,7 +3234,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^16.0.0",
     "@types/node-fetch": "2.6.11",
-    "@wongxy/eslint-config": "^0.0.17",
+    "@wongxy/eslint-config": "^0.0.19",
     "bumpp": "^9.4.0",
     "coc.nvim": "^0.0.83-next.18",
     "esbuild": "0.20.2",
