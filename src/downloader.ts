@@ -2,10 +2,10 @@ import path from 'node:path'
 import * as os from 'node:os'
 import type { ExtensionContext } from 'coc.nvim'
 import { window } from 'coc.nvim'
-import extract from 'extract-zip'
 import type { Response } from 'node-fetch'
 import fetch from 'node-fetch'
 import * as fs from 'fs-extra'
+import { extract } from './extract-zip'
 
 const ls_name = 'sumneko-lua-ls'
 
