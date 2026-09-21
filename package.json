@@ -38,16 +38,20 @@
           "default": "en-us",
           "enum": [
             "en-us",
+            "es-419",
+            "ja-jp",
+            "pt-br",
             "zh-cn",
-            "zh-tw",
-            "pt-br"
+            "zh-tw"
           ],
           "description": "The localized language used",
           "enumDescriptions": [
             "`\"en-us\"` English",
+            "`\"es-419\"` Español (Latinoamérica)",
+            "`\"ja-jp\"` 日本語",
+            "`\"pt-br\"` Português",
             "`\"zh-cn\"` 简体中文",
-            "`\"zh-tw\"` 繁體中文",
-            "`\"pt-br\"` Português"
+            "`\"zh-tw\"` 繁體中文"
           ]
         },
         "sumneko-lua.logPath": {
