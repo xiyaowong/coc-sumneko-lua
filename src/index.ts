@@ -7,6 +7,12 @@ import { Ctx } from './ctx'
 import { downloadServer } from './downloader'
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  window.showNotification({
+    title: 'coc-sumneko-lua',
+    content: 'coc-sumneko-lua is depracated, please use [coc-luals](https://github.com/xiyaowong/coc-luals) instead.',
+    kind: 'warning',
+  })
+
   const ctx = new Ctx(context)
   if (!ctx.config.enabled)
     return

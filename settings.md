@@ -1,3 +1,4 @@
+
 # Get more information
 
 - [schema.json](https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json)
@@ -34,6 +35,18 @@
 - type: `boolean`
 - default: `true`
 - description:    Whether the addon manager is enabled or not.
+## `Lua.addonManager.repositoryBranch`
+- type: `string`
+- default: `""`
+- description:    Specifies the git branch used by the addon manager.
+## `Lua.addonManager.repositoryPath`
+- type: `string`
+- default: `""`
+- description:    Specifies the git path used by the addon manager.
+## `Lua.addonRepositoryPath`
+- type: `string`
+- default: `""`
+- description:    Specifies the addon repository path (not related to the addon manager).
 ## `Lua.codeLens.enable`
 - type: `boolean`
 - default: `false`
@@ -58,6 +71,10 @@
 - type: `string`
 - default: `"Replace"`
 - description:    Shows keyword syntax snippets.
+## `Lua.completion.maxSuggestCount`
+- type: `integer`
+- default: `100`
+- description:    Maximum number of fields to analyze for completions. When an object has more fields than this limit, completions will require more specific input to appear.
 ## `Lua.completion.postfix`
 - type: `string`
 - default: `"@"`
@@ -82,18 +99,22 @@
 - type: `array`
 - default: `[]`
 - description:    Disabled diagnostic (Use code in hover brackets).
-## `Lua.diagnostics.disableScheme`
-- type: `array`
-- default: `["git"]`
-- description:    Do not diagnose Lua files that use the following scheme.
 ## `Lua.diagnostics.enable`
 - type: `boolean`
 - default: `true`
 - description:    Enable diagnostics.
+## `Lua.diagnostics.enableScheme`
+- type: `array`
+- default: `["file"]`
+- description:    TODO: Needs documentation
 ## `Lua.diagnostics.globals`
 - type: `array`
 - default: `[]`
 - description:    Defined global variables.
+## `Lua.diagnostics.globalsRegex`
+- type: `array`
+- default: `[]`
+- description:    Find defined global variables using regex.
 ## `Lua.diagnostics.groupFileStatus`
 - type: `object`
 - default: `undefined`
@@ -165,6 +186,14 @@ End with `!` means override the group setting `diagnostics.groupSeverity`.
 - type: `array`
 - default: `[]`
 - description:    Treat specific field names as protected, e.g. `m_*` means `XXX.m_id` and `XXX.m_type` are protected, witch can only be accessed in the class where the definition is located and its subclasses.
+## `Lua.doc.regengine`
+- type: `string`
+- default: `"glob"`
+- description:    The regular expression engine used for matching documentation scope names.
+## `Lua.docScriptPath`
+- type: `string`
+- default: `""`
+- description:    The regular expression engine used for matching documentation scope names.
 ## `Lua.format.defaultConfig`
 - type: `object`
 - default: `{}`
@@ -183,6 +212,10 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 - type: `boolean`
 - default: `true`
 - description:    If the called function is marked `---@async`, prompt `await` at the call.
+## `Lua.hint.awaitPropagate`
+- type: `boolean`
+- default: `false`
+- description:    Enable the propagation of `await`. When a function calls a function marked `---@async`,it will be automatically marked as `---@async`.
 ## `Lua.hint.enable`
 - type: `boolean`
 - default: `true`
@@ -218,7 +251,7 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 
 ## `Lua.hover.previewFields`
 - type: `integer`
-- default: `50`
+- default: `10`
 - description:    When hovering to view a table, limits the maximum number of previews for fields.
 ## `Lua.hover.viewNumber`
 - type: `boolean`
@@ -232,6 +265,14 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 - type: `integer`
 - default: `1000`
 - description:    The maximum length of a hover to view the contents of a string.
+## `Lua.language.completeAnnotation`
+- type: `boolean`
+- default: `true`
+- description:    (VSCode only) Automatically insert "---@ " after a line break following a annotation.
+## `Lua.language.fixIndent`
+- type: `boolean`
+- default: `true`
+- description:    (VSCode only) Fix incorrect auto-indentation, such as incorrect indentation when line breaks occur within a string containing the word "function".
 ## `Lua.misc.executablePath`
 - type: `string`
 - default: `""`
@@ -243,7 +284,9 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 ## `Lua.nameStyle.config`
 - type: `object`
 - default: `{}`
-- description:    Set name style config
+- description:    Set name style config.
+Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/docs) to learn usage.
+
 ## `Lua.runtime.builtin`
 - type: `object`
 - default: `undefined`
@@ -252,6 +295,12 @@ Read [formatter docs](https://github.com/CppCXY/EmmyLuaCodeStyle/tree/master/doc
 * `default`: Indicates that the library will be enabled or disabled according to the runtime version
 * `enable`: always enable
 * `disable`: always disable
+
+## `Lua.runtime.enableLuaJITExtensions`
+- type: `boolean`
+- default: `false`
+- description:    Enable LuaJIT extension syntax (requires `Lua.runtime.version` to be set to `LuaJIT`).
+Each extension can also be enabled individually via `Lua.runtime.nonstandardSymbol`.
 
 ## `Lua.runtime.fileEncoding`
 - type: `string`
@@ -278,12 +327,12 @@ If you want to load files outside the workspace, you need to set `Lua.workspace.
 - default: `false`
 - description:    When enabled, `runtime.path` will only search the first level of directories, see the description of `runtime.path`.
 ## `Lua.runtime.plugin`
-- type: `string`
-- default: `""`
+- type: `string,array`
+- default: `undefined`
 - description:    Plugin path. Please read [wiki](https://luals.github.io/wiki/plugins) to learn more.
 ## `Lua.runtime.pluginArgs`
-- type: `array`
-- default: `[]`
+- type: `array,object`
+- default: `undefined`
 - description:    Additional arguments for the plugin.
 ## `Lua.runtime.special`
 - type: `object`
@@ -332,6 +381,26 @@ The following example shows that 'include' is treated as' require '.
 - type: `boolean`
 - default: `true`
 - description:    Allowed to assign the `number` type to the `integer` type.
+## `Lua.type.checkTableShape`
+- type: `boolean`
+- default: `false`
+- description:    Strictly check the shape of the table.
+
+## `Lua.type.inferParamType`
+- type: `boolean`
+- default: `false`
+- description:    When a parameter type is not annotated, it is inferred from the function's call sites.
+
+When this setting is `false`, the type of the parameter is `any` when it is not annotated.
+
+## `Lua.type.inferTableSize`
+- type: `integer`
+- default: `10`
+- description:    Maximum number of table fields analyzed during type inference.
+## `Lua.type.maxUnionVariants`
+- type: `integer`
+- default: `0`
+- description:    TODO: Needs documentation
 ## `Lua.type.weakNilCheck`
 - type: `boolean`
 - default: `false`
@@ -370,6 +439,10 @@ When this setting is `false`, the `number|boolean` type cannot be assigned to th
 * skynet
 * Jass
 
+## `Lua.workspace.dofileRoots`
+- type: `array`
+- default: `[]`
+- description:    In addition to the current workspace, which directories `dofile` will treat as a possible root. The files in these directories will be loaded immediately.
 ## `Lua.workspace.ignoreDir`
 - type: `array`
 - default: `[".vscode"]`

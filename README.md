@@ -1,3 +1,7 @@
+**coc-sumneko-lua is depracated, please use [coc-luals](https://github.com/xiyaowong/coc-luals) instead.**
+
+---
+
 # coc-sumneko-lua
 
 Lua extension using sumneko lua-language-server for coc.nvim
